@@ -47,7 +47,7 @@ class ProductItemCard extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 55,
+            bottom: 45,
             left: 5,
             width: Get.width / 2.5 - 10,
             child: Text(
@@ -56,7 +56,7 @@ class ProductItemCard extends StatelessWidget {
                 color: Get.isDarkMode
                     ? MyColorTheme.dark.withRed(50)
                     : MyColorTheme.light.withRed(50),
-                fontSize: 13,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.ellipsis,
@@ -75,7 +75,7 @@ class ProductItemCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.ellipsis,
-              maxLines: 3,
+              maxLines: 2,
             ),
           ),
           Positioned(

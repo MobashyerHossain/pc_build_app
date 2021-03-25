@@ -59,7 +59,7 @@ class ScrappingRepository {
     }
   }
 
-  Future<bool> checkNextPageAvailibility({
+  checkNextPageAvailibility({
     required int page,
     required String category,
     required String site,
@@ -82,7 +82,7 @@ class ScrappingRepository {
         }
       case ScrapperConstants.WEBSITE_TECHLAND:
         {
-          return _starScrapper.checkNextPage(
+          return _techScrapper.checkNextPage(
             page: page,
             category: category,
           );
