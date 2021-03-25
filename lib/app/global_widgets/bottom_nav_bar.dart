@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
-import 'package:pc_build_app/app/modules/home/home_controller.dart';
+import 'package:pc_build_app/app/global_controller/website_controller.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
@@ -11,8 +11,8 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<HomeController>(
-      init: HomeController(),
+    return GetX<WebsiteController>(
+      init: WebsiteController(),
       builder: (_) {
         final sites = _.getWebSites();
         return CurvedNavigationBar(
@@ -33,7 +33,7 @@ class BottomNavBar extends StatelessWidget {
               ),
           ],
           onTap: (index) {
-            //Handle button tap
+            _.setWebsite(sites[index]);
           },
         );
       },

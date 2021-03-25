@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/modules/home/home_binding.dart';
 import 'package:pc_build_app/app/modules/home/home_page.dart';
+import 'package:pc_build_app/app/modules/product/product_binding.dart';
+import 'package:pc_build_app/app/modules/product/product_page.dart';
 import 'package:pc_build_app/app/modules/splash/spash_page.dart';
 import 'package:pc_build_app/app/modules/splash/splash_binding.dart';
 part './app_routes.dart';
@@ -19,10 +21,11 @@ abstract class AppPages {
       binding: HomeBinding(),
       transition: Transition.zoom,
     ),
-    // GetPage(
-    //   name: AppRoutes.DETAILS,
-    //   page: () => DetailsPage(),
-    //   binding: DetailsBinding(),
-    // ),
+    GetPage(
+      name: Routes.PRODUCT,
+      page: () => ProductPage(),
+      binding: ProductBinding(),
+      transition: Transition.zoom,
+    ),
   ];
 }

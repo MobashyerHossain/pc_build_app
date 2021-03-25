@@ -10,7 +10,7 @@ class ScrappingRepository {
   final StartechScrapper _starScrapper = Get.find<StartechScrapper>();
   final TechlandScrapper _techScrapper = Get.find<TechlandScrapper>();
 
-  Stream<List<ProductInfoModel>> getProductInfoList({
+  Stream<List<ProductInfoModel>> getProducts({
     required int page,
     required String category,
     required String site,
@@ -20,7 +20,7 @@ class ScrappingRepository {
         {
           print(site);
           return _ryanScrapper
-              .getProductInfoList(
+              .getProducts(
                 page: page,
                 category: category,
               )
@@ -30,7 +30,7 @@ class ScrappingRepository {
         {
           print(site);
           return _starScrapper
-              .getProductInfoList(
+              .getProducts(
                 page: page,
                 category: category,
               )
@@ -40,7 +40,7 @@ class ScrappingRepository {
         {
           print(site);
           return _techScrapper
-              .getProductInfoList(
+              .getProducts(
                 page: page,
                 category: category,
               )
@@ -50,7 +50,7 @@ class ScrappingRepository {
         {
           print(site);
           return _starScrapper
-              .getProductInfoList(
+              .getProducts(
                 page: page,
                 category: category,
               )

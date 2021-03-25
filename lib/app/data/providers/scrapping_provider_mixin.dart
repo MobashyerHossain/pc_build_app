@@ -5,7 +5,7 @@ mixin Scrapper {
   Map<String, String> categoryUrls = {};
   String localUrl = '';
 
-  Future<List<ProductInfoModel>> getProductInfoList({
+  Future<List<ProductInfoModel>> getProducts({
     required category,
     required page,
   }) async {

@@ -4,6 +4,7 @@ import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/bottom_nav_bar.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:pc_build_app/app/modules/home/local_widgets/item_card.dart';
+import 'package:pc_build_app/app/routes/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
   @override
@@ -45,6 +46,7 @@ class HomePage extends GetView<HomeController> {
                   right: 20,
                 ),
                 child: GridView.builder(
+                  padding: EdgeInsets.only(bottom: 70, top: 30),
                   itemCount: categories.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 1.5,
@@ -56,7 +58,14 @@ class HomePage extends GetView<HomeController> {
                         : 3,
                   ),
                   itemBuilder: (BuildContext context, int index) {
-                    return ItemCard(category: categories[index]);
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(
+                        Routes.PRODUCT,
+                      ),
+                      child: ItemCard(
+                        category: categories[index],
+                      ),
+                    );
                   },
                 ),
               );

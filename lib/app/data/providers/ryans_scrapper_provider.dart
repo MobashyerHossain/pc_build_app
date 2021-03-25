@@ -12,7 +12,7 @@ class RyansScrapper with Scrapper {
   }
 
   @override
-  getProductInfoList({required category, required page}) async {
+  getProducts({required category, required page}) async {
     WebScraper webScraper = WebScraper(siteUrl);
 
     final nameList = [];
