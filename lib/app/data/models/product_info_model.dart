@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-class BasicProductInfoModel {
+class ProductInfoModel {
   String id;
   String title;
   String url;
   String thumb;
   int price;
-  BasicProductInfoModel({
+  ProductInfoModel({
     required this.id,
     required this.title,
     required this.url,
@@ -14,14 +14,14 @@ class BasicProductInfoModel {
     required this.price,
   });
 
-  BasicProductInfoModel copyWith({
+  ProductInfoModel copyWith({
     String? id,
     String? title,
     String? url,
     String? thumb,
     int? price,
   }) {
-    return BasicProductInfoModel(
+    return ProductInfoModel(
       id: id ?? this.id,
       title: title ?? this.title,
       url: url ?? this.url,
@@ -30,8 +30,8 @@ class BasicProductInfoModel {
     );
   }
 
-  static BasicProductInfoModel sampleModel() {
-    return BasicProductInfoModel(
+  static ProductInfoModel sampleModel() {
+    return ProductInfoModel(
       id: 'id',
       title: 'title',
       url: 'url.com',
@@ -50,8 +50,8 @@ class BasicProductInfoModel {
     };
   }
 
-  factory BasicProductInfoModel.fromMap(Map<String, dynamic> map) {
-    return BasicProductInfoModel(
+  factory ProductInfoModel.fromMap(Map<String, dynamic> map) {
+    return ProductInfoModel(
       id: map['id'],
       title: map['title'],
       url: map['url'],
@@ -62,8 +62,8 @@ class BasicProductInfoModel {
 
   String toJson() => json.encode(toMap());
 
-  factory BasicProductInfoModel.fromJson(String source) =>
-      BasicProductInfoModel.fromMap(json.decode(source));
+  factory ProductInfoModel.fromJson(String source) =>
+      ProductInfoModel.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -74,7 +74,7 @@ class BasicProductInfoModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is BasicProductInfoModel &&
+    return other is ProductInfoModel &&
         other.id == id &&
         other.title == title &&
         other.url == url &&

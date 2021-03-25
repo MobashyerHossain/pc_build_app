@@ -1,15 +1,14 @@
-import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
-import 'package:pc_build_app/app/data/models/basic_product_info_model.dart';
-import 'package:pc_build_app/app/data/providers/providers/scrapping_provider_mixin.dart';
+import 'package:pc_build_app/app/data/models/product_info_model.dart';
+import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
 
-class TechlandScrapper with Scrapper {
-  TechlandScrapper() {
-    siteUrl = ScrapperConstants.TECHLAND_BASE_URL;
-    categoryUrls = ScrapperConstants.TECHLAND_CATEGORY_LIST;
-    localUrl = ScrapperConstants.TECHLAND_PRODUCT_INDEX_URL;
+class RyansScrapper with Scrapper {
+  RyansScrapper() {
+    siteUrl = ScrapperConstants.RYANS_BASE_URL;
+    categoryUrls = ScrapperConstants.RYANS_CATEGORY_LIST;
+    localUrl = ScrapperConstants.RYANS_PRODUCT_INDEX_URL;
   }
 
   @override
@@ -20,7 +19,7 @@ class TechlandScrapper with Scrapper {
     final urlList = [];
     final thumbnailList = [];
     final priceList = [];
-    List<BasicProductInfoModel> productList = [];
+    List<ProductInfoModel> productList = [];
 
     var uuid = Uuid();
 
@@ -32,7 +31,7 @@ class TechlandScrapper with Scrapper {
       if (await webScraper.loadWebPage(url)) {
         // Scrapping Title, Url
         webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.caption > div.name > a',
+          'div.product-content-info > a.product-title-grid',
           ['href'],
         ).forEach((element) {
           final name = element['title'];
@@ -43,7 +42,7 @@ class TechlandScrapper with Scrapper {
 
         // Scrapping Thumbnail
         webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.image > a > div > img',
+          'div.product-thumb > a > img',
           ['src'],
         ).forEach((element) {
           final thumbnail = element['attributes']['src'];
@@ -52,7 +51,7 @@ class TechlandScrapper with Scrapper {
 
         // Scrapping Price
         webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.caption > div.price > span.price-tax',
+          'div.price-label > div.special-price > span',
           [],
         ).forEach((element) {
           final price = int.parse(
@@ -64,7 +63,7 @@ class TechlandScrapper with Scrapper {
         // Populating ProductInfo List
         for (var i = 0; i < nameList.length; i++) {
           productList.add(
-            BasicProductInfoModel.fromMap(
+            ProductInfoModel.fromMap(
               {
                 'id': uuid.v5(
                   Uuid.NAMESPACE_URL,
@@ -111,7 +110,7 @@ class TechlandScrapper with Scrapper {
 
       if (await webScraper.loadWebPage(url)) {
         var prices = webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.caption > div.price > span.price-tax',
+          'div.price-label > div.special-price > span',
           [],
         );
 

@@ -1,16 +1,16 @@
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
-import 'package:pc_build_app/app/data/models/basic_product_info_model.dart';
-import 'package:pc_build_app/app/data/providers/providers/ryans_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/providers/providers/startech_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/providers/providers/techland_scrapper_provider.dart';
+import 'package:pc_build_app/app/data/models/product_info_model.dart';
+import 'package:pc_build_app/app/data/providers/ryans_scrapper_provider.dart';
+import 'package:pc_build_app/app/data/providers/startech_scrapper_provider.dart';
+import 'package:pc_build_app/app/data/providers/techland_scrapper_provider.dart';
 
 class ScrappingRepository {
   final RyansScrapper _ryanScrapper = Get.find<RyansScrapper>();
   final StartechScrapper _starScrapper = Get.find<StartechScrapper>();
   final TechlandScrapper _techScrapper = Get.find<TechlandScrapper>();
 
-  Stream<List<BasicProductInfoModel>> getProductInfoList({
+  Stream<List<ProductInfoModel>> getProductInfoList({
     required int page,
     required String category,
     required String site,

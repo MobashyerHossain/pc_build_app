@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:pc_build_app/app/data/providers/providers/ryans_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/providers/providers/startech_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/providers/providers/techland_scrapper_provider.dart';
+import 'package:pc_build_app/app/data/providers/ryans_scrapper_provider.dart';
+import 'package:pc_build_app/app/data/providers/startech_scrapper_provider.dart';
+import 'package:pc_build_app/app/data/providers/techland_scrapper_provider.dart';
 
 class DependencyInjection {
   static void init() {

@@ -22,34 +22,39 @@ class MyColorTheme {
   final lightAccentColor = Colors.orange[300];
   final darkAccentColor = Colors.grey[700];
 
-  final lightColorScheme = ColorScheme.light(
-    primary: Colors.grey,
-    primaryVariant: Colors.grey,
-    secondary: Colors.grey,
-    secondaryVariant: Colors.grey,
-    surface: Colors.grey,
-    background: Colors.orange,
+  static const lightTileBackground = MyColorTheme.light;
+  static const darkTileBackground = MyColorTheme.dark;
+  static const light = Colors.lightGreenAccent;
+  static const dark = Colors.deepPurple;
+
+  static const lightColorScheme = ColorScheme(
+    primary: MyColorTheme.dark,
+    primaryVariant: MyColorTheme.dark,
+    secondary: MyColorTheme.dark,
+    secondaryVariant: MyColorTheme.dark,
+    surface: MyColorTheme.dark,
+    background: MyColorTheme.light,
     error: Colors.red,
-    onPrimary: Colors.orange,
-    onSecondary: Colors.orange,
-    onSurface: Colors.orange,
-    onBackground: Colors.orange,
+    onPrimary: MyColorTheme.light,
+    onSecondary: MyColorTheme.light,
+    onSurface: MyColorTheme.light,
+    onBackground: MyColorTheme.light,
     onError: Colors.red,
     brightness: Brightness.light,
   );
 
-  final darkColorScheme = ColorScheme.dark(
-    primary: Colors.orange,
-    primaryVariant: Colors.orange,
-    secondary: Colors.orange,
-    secondaryVariant: Colors.orange,
-    surface: Colors.orange,
-    background: Colors.grey,
+  static const darkColorScheme = ColorScheme(
+    primary: MyColorTheme.light,
+    primaryVariant: MyColorTheme.light,
+    secondary: MyColorTheme.light,
+    secondaryVariant: MyColorTheme.light,
+    surface: MyColorTheme.light,
+    background: MyColorTheme.dark,
     error: Colors.red,
-    onPrimary: Colors.grey,
-    onSecondary: Colors.grey,
-    onSurface: Colors.grey,
-    onBackground: Colors.grey,
+    onPrimary: MyColorTheme.dark,
+    onSecondary: MyColorTheme.dark,
+    onSurface: MyColorTheme.dark,
+    onBackground: MyColorTheme.dark,
     onError: Colors.red,
     brightness: Brightness.dark,
   );

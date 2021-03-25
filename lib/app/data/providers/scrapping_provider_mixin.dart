@@ -1,11 +1,11 @@
-import 'package:pc_build_app/app/data/models/basic_product_info_model.dart';
+import 'package:pc_build_app/app/data/models/product_info_model.dart';
 
 mixin Scrapper {
   String siteUrl = '';
   Map<String, String> categoryUrls = {};
   String localUrl = '';
 
-  Future<List<BasicProductInfoModel>> getProductInfoList({
+  Future<List<ProductInfoModel>> getProductInfoList({
     required category,
     required page,
   }) async {

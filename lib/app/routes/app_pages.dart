@@ -11,11 +11,13 @@ abstract class AppPages {
       name: Routes.SPLASH,
       page: () => SplashPage(),
       binding: SplashBinding(),
+      transition: Transition.zoom,
     ),
     GetPage(
       name: Routes.HOME,
       page: () => HomePage(),
       binding: HomeBinding(),
+      transition: Transition.zoom,
     ),
     // GetPage(
     //   name: AppRoutes.DETAILS,

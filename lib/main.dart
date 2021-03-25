@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.fadeIn,
       theme: MyAppTheme().lightTheme,
       darkTheme: MyAppTheme().darkTheme,
       themeMode: ThemeMode.dark,

@@ -13,6 +13,26 @@ class ScrapperConstants {
     'techland': ScrapperConstants.TECHLAND_CATEGORY_LIST,
   };
 
+  // Categories
+  static const CATEGORIES = [
+    'casing',
+    'casing_cooler',
+    'power_supply',
+    'cpu',
+    'cpu_cooler',
+    'motherboard',
+    'graphics_card',
+    'hdd',
+    'ssd',
+    'ram',
+    'keyboard',
+    'mouse',
+    'headphone',
+    'speaker',
+    'ups',
+    'monitor',
+  ];
+
   // Startech
   static const WEBSITE_STARTECH = 'startech';
   static const STARTECH_BASE_URL = 'https://www.startech.com.bd';
