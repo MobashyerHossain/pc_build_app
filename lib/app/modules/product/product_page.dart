@@ -60,8 +60,8 @@ class ProductPage extends GetView<ProductController> {
                         ];
                     return Container(
                       padding: EdgeInsets.only(
-                        left: 20,
-                        right: 20,
+                        left: 10,
+                        right: 10,
                       ),
                       child: GridView.builder(
                         padding: EdgeInsets.only(
@@ -70,9 +70,9 @@ class ProductPage extends GetView<ProductController> {
                         ),
                         itemCount: products.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 1.5,
+                          childAspectRatio: 1,
                           crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
+                          mainAxisSpacing: 40,
                           crossAxisCount: (MediaQuery.of(context).orientation ==
                                   Orientation.portrait)
                               ? 2

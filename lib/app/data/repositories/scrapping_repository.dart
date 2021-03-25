@@ -18,7 +18,7 @@ class ScrappingRepository {
     switch (site) {
       case ScrapperConstants.WEBSITE_RYANS:
         {
-          print(site);
+          print('$site repo');
           return _ryanScrapper
               .getProducts(
                 page: page,
@@ -28,7 +28,7 @@ class ScrappingRepository {
         }
       case ScrapperConstants.WEBSITE_STARTECH:
         {
-          print(site);
+          print('$site repo');
           return _starScrapper
               .getProducts(
                 page: page,
@@ -38,7 +38,7 @@ class ScrappingRepository {
         }
       case ScrapperConstants.WEBSITE_TECHLAND:
         {
-          print(site);
+          print('$site repo');
           return _techScrapper
               .getProducts(
                 page: page,
@@ -48,7 +48,7 @@ class ScrappingRepository {
         }
       default:
         {
-          print(site);
+          print('$site repo');
           return _starScrapper
               .getProducts(
                 page: page,

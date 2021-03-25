@@ -4,6 +4,7 @@ import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/bottom_nav_bar.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:pc_build_app/app/modules/home/local_widgets/item_card.dart';
+import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -59,9 +60,13 @@ class HomePage extends GetView<HomeController> {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
-                      onTap: () => Get.toNamed(
-                        Routes.PRODUCT,
-                      ),
+                      onTap: () {
+                        Get.find<ProductController>()
+                            .setCategory(categories[index].code);
+                        Get.toNamed(
+                          Routes.PRODUCT,
+                        );
+                      },
                       child: ItemCard(
                         category: categories[index],
                       ),
