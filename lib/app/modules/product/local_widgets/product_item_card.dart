@@ -90,17 +90,52 @@ class ProductItemCard extends StatelessWidget {
                   topLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
+                // child: CachedNetworkImage(
+                //   imageUrl: '${product.thumb}',
+                //   placeholder: (context, url) => CircularProgressIndicator(),
+                //   errorWidget: (context, url, error) {
+                //     return Center(
+                //       child: Icon(
+                //         Icons.error,
+                //       ),
+                //     );
+                //   },
+                //   fit: BoxFit.cover,
+                // ),
+                // child: Image(
+                //   image: ResizeImage(
+                //     CachedNetworkImage(
+                //       imageUrl: '${product.thumb}',
+                //       placeholder: (context, url) =>
+                //           CircularProgressIndicator(),
+                //       errorWidget: (context, url, error) {
+                //         return Center(
+                //           child: Icon(
+                //             Icons.error,
+                //           ),
+                //         );
+                //       },
+                //       fit: BoxFit.cover,
+                //     ),
+                //     width: 100,
+                //     height: 100,
+                //   ),
+                // ),
                 child: CachedNetworkImage(
-                  imageUrl: '${product.thumb}',
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) {
-                    return Center(
-                      child: Icon(
-                        Icons.error,
+                  imageUrl: product.thumb,
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: ResizeImage(
+                          imageProvider,
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
-                    );
-                  },
-                  fit: BoxFit.cover,
+                    ),
+                  ),
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
                 ),
               ),
             ),

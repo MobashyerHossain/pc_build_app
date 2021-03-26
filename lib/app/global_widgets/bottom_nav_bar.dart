@@ -2,11 +2,14 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
+import 'package:pc_build_app/app/data/services/theme_services.dart';
 import 'package:pc_build_app/app/global_controller/website_controller.dart';
 
 class BottomNavBar extends StatelessWidget {
+  final category;
   const BottomNavBar({
     Key? key,
+    this.category,
   }) : super(key: key);
 
   @override
@@ -16,6 +19,8 @@ class BottomNavBar extends StatelessWidget {
       builder: (_) {
         final sites = _.getWebSites();
         return CurvedNavigationBar(
+          index:
+              BottomBarService().index == null ? 1 : BottomBarService().index,
           height: 50,
           backgroundColor:
               Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
@@ -33,7 +38,10 @@ class BottomNavBar extends StatelessWidget {
               ),
           ],
           onTap: (index) {
-            _.setWebsite(sites[index]);
+            BottomBarService().switchIndex(
+              index,
+            );
+            _.setWebsite(sites[index], category);
           },
         );
       },

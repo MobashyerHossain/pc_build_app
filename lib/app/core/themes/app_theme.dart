@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 
 class MyAppTheme {
-  final lightTheme = ThemeData.from(
+  static final light = ThemeData.light().copyWith(
     colorScheme: MyColorTheme.lightColorScheme,
   );
-  final darkTheme = ThemeData.from(
+  static final dark = ThemeData.dark().copyWith(
     colorScheme: MyColorTheme.darkColorScheme,
   );
   // final lightTheme = ThemeData.light().copyWith(

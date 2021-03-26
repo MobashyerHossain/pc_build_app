@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
+import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
+import 'package:pc_build_app/app/data/services/theme_services.dart';
 import 'package:pc_build_app/app/global_widgets/bottom_nav_bar.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:pc_build_app/app/modules/home/local_widgets/item_card.dart';
@@ -14,12 +17,10 @@ class HomePage extends GetView<HomeController> {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           child: Icon(Get.isDarkMode ? Icons.nights_stay : Icons.wb_sunny),
-          onPressed: () => Get.changeThemeMode(
-            Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
-          ),
+          onPressed: ThemeService().switchTheme,
         ),
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        bottomNavigationBar: BottomNavBar(),
+        // bottomNavigationBar: BottomNavBar(),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -46,33 +47,70 @@ class HomePage extends GetView<HomeController> {
                   left: 20,
                   right: 20,
                 ),
-                child: GridView.builder(
-                  padding: EdgeInsets.only(bottom: 70, top: 30),
+                child: StaggeredGridView.countBuilder(
+                  crossAxisCount: 2,
                   itemCount: categories.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 1.5,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    crossAxisCount: (MediaQuery.of(context).orientation ==
-                            Orientation.portrait)
-                        ? 2
-                        : 3,
-                  ),
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
                       onTap: () {
-                        Get.find<ProductController>()
-                            .setCategory(categories[index].code);
+                        print("at home_page ${categories[index].code}");
+                        Get.find<ProductController>().fetchProducts(
+                          1,
+                          categories[index].code,
+                          null,
+                        );
                         Get.toNamed(
                           Routes.PRODUCT,
                         );
                       },
-                      child: ItemCard(
-                        category: categories[index],
+                      child: FittedBox(
+                        fit: BoxFit.fitHeight,
+                        child: SizedBox(
+                          width: Get.width / 2.5,
+                          height: 170,
+                          child: ItemCard(
+                            category: categories[index],
+                          ),
+                        ),
                       ),
                     );
                   },
+                  staggeredTileBuilder: (int index) =>
+                      new StaggeredTile.count(index % 3 == 2 ? 2 : 1, 1),
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 0.0,
                 ),
+                // GridView.builder(
+                //   padding: EdgeInsets.only(bottom: 70, top: 0),
+                //   itemCount: categories.length,
+                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                //     childAspectRatio: 1,
+                //     crossAxisSpacing: 20,
+                //     mainAxisSpacing: 20,
+                //     crossAxisCount: (MediaQuery.of(context).orientation ==
+                //             Orientation.portrait)
+                //         ? 2
+                //         : 3,
+                //   ),
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return GestureDetector(
+                //       onTap: () {
+                //         print("at home_page ${categories[index].code}");
+                //         Get.find<ProductController>().fetchProducts(
+                //           1,
+                //           categories[index].code,
+                //           null,
+                //         );
+                //         Get.toNamed(
+                //           Routes.PRODUCT,
+                //         );
+                //       },
+                //       child: ItemCard(
+                //         category: categories[index],
+                //       ),
+                //     );
+                //   },
+                // ),
               );
             },
           ),

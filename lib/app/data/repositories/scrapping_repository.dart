@@ -10,7 +10,7 @@ class ScrappingRepository {
   final StartechScrapper _starScrapper = Get.find<StartechScrapper>();
   final TechlandScrapper _techScrapper = Get.find<TechlandScrapper>();
 
-  Stream<List<ProductInfoModel>> getProducts({
+  Future<List<ProductInfoModel>> getProducts({
     required int page,
     required String category,
     required String site,
@@ -19,42 +19,34 @@ class ScrappingRepository {
       case ScrapperConstants.WEBSITE_RYANS:
         {
           print('$site repo');
-          return _ryanScrapper
-              .getProducts(
-                page: page,
-                category: category,
-              )
-              .asStream();
+          return _ryanScrapper.getProducts(
+            page: page,
+            category: category,
+          );
         }
       case ScrapperConstants.WEBSITE_STARTECH:
         {
           print('$site repo');
-          return _starScrapper
-              .getProducts(
-                page: page,
-                category: category,
-              )
-              .asStream();
+          return _starScrapper.getProducts(
+            page: page,
+            category: category,
+          );
         }
       case ScrapperConstants.WEBSITE_TECHLAND:
         {
           print('$site repo');
-          return _techScrapper
-              .getProducts(
-                page: page,
-                category: category,
-              )
-              .asStream();
+          return _techScrapper.getProducts(
+            page: page,
+            category: category,
+          );
         }
       default:
         {
           print('$site repo');
-          return _starScrapper
-              .getProducts(
-                page: page,
-                category: category,
-              )
-              .asStream();
+          return _starScrapper.getProducts(
+            page: page,
+            category: category,
+          );
         }
     }
   }

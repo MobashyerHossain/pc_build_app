@@ -23,7 +23,7 @@ class DependencyInjection {
     );
     Get.lazyPut<WebsiteController>(
       () => WebsiteController(
-        ScrapperConstants.WEBSITE_STARTECH,
+        ScrapperConstants.WEBSITE_RYANS,
       ),
     );
     Get.lazyPut<ProductController>(

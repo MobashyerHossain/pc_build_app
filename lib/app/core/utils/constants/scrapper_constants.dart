@@ -3,7 +3,7 @@ class ScrapperConstants {
   static const WEBSITE_LIST = {
     'startech': 'Star Tech',
     'ryans': 'Ryans Computers',
-    'techland': 'TechLand'
+    'techland': 'Techland BD'
   };
 
   // Category List
