@@ -25,6 +25,8 @@ class ProductController extends GetxController {
   final _hasError = false.obs;
   final _error = ''.obs;
 
+  final _nextPageAvailable = true.obs;
+
   setPage(value) => this._page.value = value;
   getPage() => this._page.value;
 
@@ -44,6 +46,9 @@ class ProductController extends GetxController {
   getError() => this._error.value;
   setError(value) => this._error.value = value;
 
+  getNextPageAvailable() => this._nextPageAvailable.value;
+  setNextPageAvailable(value) => this._nextPageAvailable.value = value;
+
   // ProductController() {
   //   setSite(ScrapperConstants.WEBSITE_LIST[BottomBarService().index]);
   //   print('lalala');
@@ -56,6 +61,18 @@ class ProductController extends GetxController {
         .elementAt(BottomBarService().index)
         .key;
     setSite(_tempSite);
+  }
+
+  @override
+  onReady() {
+    super.onReady();
+    print('dsfdf');
+  }
+
+  @override
+  onClose() {
+    super.onClose();
+    print('closed');
   }
 
   // @override
@@ -88,12 +105,20 @@ class ProductController extends GetxController {
         site: getSite(),
       );
       setHasError(false);
+      checkNextPage()
+          .then(
+            (value) => setNextPageAvailable(value),
+          )
+          .whenComplete(
+            () => print(
+              getNextPageAvailable(),
+            ),
+          );
     } catch (e) {
       setHasError(true);
       setError(e);
     } finally {
       setLoading(false);
-      // _snackbarForAll();
     }
   }
 
@@ -138,32 +163,9 @@ class ProductController extends GetxController {
 
   onVerticalSwipe(SwipeDirection direction) {
     if (direction == SwipeDirection.left) {
-      checkNextPage().then(
-        (value) {
-          if (value) {
-            setPage(getPage() + 1);
-            Get.toNamed(
-              Routes.PRODUCT,
-            );
-            fetchProducts(null, null, null);
-          } else {
-            _snackbar('Next');
-            print('Current page ${_page.value} No Next Page');
-          }
-        },
-      );
-      print('page ${_page.value}');
+      pageChange('right');
     } else {
-      if (_page.value > 1) {
-        setPage(getPage() - 1);
-        Get.toNamed(
-          Routes.PRODUCT,
-        );
-        fetchProducts(null, null, null);
-      } else {
-        _snackbar('Previous');
-        print('Current page ${_page.value} No Prev Page');
-      }
+      pageChange('left');
     }
   }
 
@@ -195,7 +197,7 @@ class ProductController extends GetxController {
     );
   }
 
-  _snackbarForAll() {
+  snackbarForAll() {
     var title;
     var message;
     if (getPage() == 1) {

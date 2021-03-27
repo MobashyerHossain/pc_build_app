@@ -5,12 +5,14 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
+import 'package:pc_build_app/app/global_widgets/section_title.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/product_item_card.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ProductPage extends GetView<ProductController> {
   final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -39,75 +41,79 @@ class ProductPage extends GetView<ProductController> {
                     tileMode: TileMode.clamp,
                   ),
                 ),
-                child: GetX<ProductController>(
-                  init: ProductController(),
-                  builder: (_) {
-                    return FutureBuilder(
-                      future: _.getProducts(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.data != null) {
-                          if (_.getLoading()) {
-                            print('loading');
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else {
-                            if (_.getHasError()) {
-                              print('haserror');
+                child: Container(
+                  child: GetX<ProductController>(
+                    init: ProductController(),
+                    builder: (_) {
+                      return FutureBuilder(
+                        future: _.getProducts(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.data != null) {
+                            if (_.getLoading()) {
+                              print('loading');
                               return Center(
-                                child: Text(
-                                  _.getError(),
-                                ),
+                                child: CircularProgressIndicator(),
                               );
                             } else {
-                              print('no issue');
-                              return Container(
-                                padding: EdgeInsets.only(
-                                  left: 10,
-                                  right: 10,
-                                ),
-                                child: StaggeredGridView.countBuilder(
-                                  padding: EdgeInsets.only(
-                                    bottom: 70,
-                                    top: 30,
+                              if (_.getHasError()) {
+                                print('haserror');
+                                return Center(
+                                  child: Text(
+                                    _.getError(),
                                   ),
-                                  crossAxisCount: 2,
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      onTap: () {},
-                                      child: Center(
-                                        child: FittedBox(
-                                          fit: BoxFit.fitWidth,
-                                          child: SizedBox(
-                                            width: Get.width / 2.2,
-                                            height: 160,
-                                            child: ProductItemCard(
-                                              product: snapshot.data[index],
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).clearSnackBars();
+                                print('no issue');
+                                return Container(
+                                  padding: EdgeInsets.only(
+                                    left: 10,
+                                    right: 10,
+                                  ),
+                                  child: StaggeredGridView.countBuilder(
+                                    padding: EdgeInsets.only(
+                                      bottom: 70,
+                                      top: 40,
+                                    ),
+                                    crossAxisCount: 2,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onTap: () {},
+                                        child: Center(
+                                          child: FittedBox(
+                                            fit: BoxFit.fitWidth,
+                                            child: SizedBox(
+                                              width: Get.width / 2.2,
+                                              height: 160,
+                                              child: ProductItemCard(
+                                                product: snapshot.data[index],
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  staggeredTileBuilder: (int index) =>
-                                      new StaggeredTile.count(
-                                          index % 3 == 2 ? 2 : 1, 1),
-                                  mainAxisSpacing: 30.0,
-                                  crossAxisSpacing: 0.0,
-                                ),
-                              );
+                                      );
+                                    },
+                                    staggeredTileBuilder: (int index) =>
+                                        new StaggeredTile.count(
+                                            index % 3 == 2 ? 2 : 1, 1),
+                                    mainAxisSpacing: 30.0,
+                                    crossAxisSpacing: 0.0,
+                                  ),
+                                );
+                              }
                             }
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
                           }
-                        } else {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    );
-                  },
+                        },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -135,6 +141,34 @@ class ProductPage extends GetView<ProductController> {
                   topRight: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
+              ),
+            ),
+            Positioned(
+              top: 5,
+              width: Get.width,
+              child: GetX<ProductController>(
+                init: ProductController(),
+                builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SectionTitle(
+                        title: controller
+                            .getCategory()
+                            .toString()
+                            .replaceAll('_', ' ')
+                            .toUpperCase(),
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.all(8),
+                      ),
+                      SectionTitle(
+                        title: "Page ${_.getPage()}",
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.all(8),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -174,30 +208,33 @@ class PageChangeIndicator extends StatelessWidget {
               color: Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
             ),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  duration: Duration(
-                    seconds: 3,
-                  ),
-                  backgroundColor: Get.isDarkMode
-                      ? MyColorTheme.dark.withOpacity(0.6)
-                      : MyColorTheme.light.withOpacity(0.6),
-                  content: Container(
-                    decoration: BoxDecoration(
-                        // color:
-                        ),
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Get.isDarkMode
-                            ? MyColorTheme.light
-                            : MyColorTheme.dark,
-                      ),
-                    ),
-                  ),
-                ),
-              );
+              ProductsPageSplashScreen(context);
               controller.pageChange(pageChangeDirection);
             },
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ignore: non_constant_identifier_names
+  void ProductsPageSplashScreen(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(
+          seconds: 3,
+        ),
+        backgroundColor: Get.isDarkMode
+            ? MyColorTheme.dark.withOpacity(0.6)
+            : MyColorTheme.light.withOpacity(0.6),
+        content: Container(
+          decoration: BoxDecoration(
+              // color:
+              ),
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
+            ),
           ),
         ),
       ),

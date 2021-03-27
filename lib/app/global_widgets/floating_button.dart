@@ -62,24 +62,6 @@ class FloatingButton extends StatelessWidget {
             if (fabKey.currentState!.isOpen) {
               fabKey.currentState!.close();
             }
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.transparent,
-                behavior: SnackBarBehavior.fixed,
-                duration: Duration(
-                  seconds: 3,
-                ),
-                padding: EdgeInsets.all(0),
-                content: Container(
-                  height: 200,
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    color:
-                        Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-                  ),
-                ),
-              ),
-            );
           },
         ),
       ],
