@@ -1,41 +1,37 @@
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:pc_build_app/app/core/themes/color_theme.dart';
-import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
-import 'package:pc_build_app/app/data/services/theme_services.dart';
-import 'package:pc_build_app/app/global_widgets/bottom_nav_bar.dart';
+import 'package:pc_build_app/app/global_widgets/floating_button.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:pc_build_app/app/modules/home/local_widgets/item_card.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
+  final GlobalKey<FabCircularMenuState> fabKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Get.isDarkMode ? Icons.nights_stay : Icons.wb_sunny),
-          onPressed: ThemeService().switchTheme,
+        floatingActionButton: FloatingButton(
+          fabKey: fabKey,
         ),
-        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-        // bottomNavigationBar: BottomNavBar(),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
               colors: Get.isDarkMode
                   ? <Color>[
-                      MyColorTheme.dark,
-                      MyColorTheme.dark.shade200,
+                      Colors.grey.shade900,
+                      Colors.grey.shade700,
                     ]
                   : <Color>[
-                      MyColorTheme.light.shade400,
-                      MyColorTheme.light.shade100,
+                      Colors.grey.shade100,
+                      Colors.grey.shade500,
                     ],
-              tileMode: TileMode.repeated,
+              tileMode: TileMode.clamp,
             ),
           ),
           child: GetX<HomeController>(
@@ -54,6 +50,9 @@ class HomePage extends GetView<HomeController> {
                     return GestureDetector(
                       onTap: () {
                         print("at home_page ${categories[index].code}");
+                        if (fabKey.currentState!.isOpen) {
+                          fabKey.currentState!.close();
+                        }
                         Get.find<ProductController>().fetchProducts(
                           1,
                           categories[index].code,
@@ -63,13 +62,15 @@ class HomePage extends GetView<HomeController> {
                           Routes.PRODUCT,
                         );
                       },
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: SizedBox(
-                          width: Get.width / 2.5,
-                          height: 170,
-                          child: ItemCard(
-                            category: categories[index],
+                      child: Center(
+                        child: FittedBox(
+                          fit: BoxFit.fitHeight,
+                          child: SizedBox(
+                            width: Get.width / 2.5,
+                            height: 170,
+                            child: ItemCard(
+                              category: categories[index],
+                            ),
                           ),
                         ),
                       ),
@@ -80,37 +81,6 @@ class HomePage extends GetView<HomeController> {
                   mainAxisSpacing: 20.0,
                   crossAxisSpacing: 0.0,
                 ),
-                // GridView.builder(
-                //   padding: EdgeInsets.only(bottom: 70, top: 0),
-                //   itemCount: categories.length,
-                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //     childAspectRatio: 1,
-                //     crossAxisSpacing: 20,
-                //     mainAxisSpacing: 20,
-                //     crossAxisCount: (MediaQuery.of(context).orientation ==
-                //             Orientation.portrait)
-                //         ? 2
-                //         : 3,
-                //   ),
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return GestureDetector(
-                //       onTap: () {
-                //         print("at home_page ${categories[index].code}");
-                //         Get.find<ProductController>().fetchProducts(
-                //           1,
-                //           categories[index].code,
-                //           null,
-                //         );
-                //         Get.toNamed(
-                //           Routes.PRODUCT,
-                //         );
-                //       },
-                //       child: ItemCard(
-                //         category: categories[index],
-                //       ),
-                //     );
-                //   },
-                // ),
               );
             },
           ),

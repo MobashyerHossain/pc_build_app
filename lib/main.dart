@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:pc_build_app/app/core/themes/app_theme.dart';
 import 'package:pc_build_app/app/core/utils/dependency_injection.dart';
-import 'package:pc_build_app/app/data/services/theme_services.dart';
+import 'package:pc_build_app/app/data/services/services.dart';
+import 'package:pc_build_app/app/data/services/theme_service.dart';
 import 'app/routes/app_pages.dart';
 
 main() async {
-  await GetStorage.init();
+  await Services.init();
   DependencyInjection.init();
+
   runApp(MyApp());
 }
 

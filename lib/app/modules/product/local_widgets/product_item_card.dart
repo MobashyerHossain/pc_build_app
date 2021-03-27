@@ -53,9 +53,7 @@ class ProductItemCard extends StatelessWidget {
             child: Text(
               product.price == 0 ? 'Out of\nStock' : 'Tk. ${product.price}',
               style: TextStyle(
-                color: Get.isDarkMode
-                    ? MyColorTheme.dark.withRed(50)
-                    : MyColorTheme.light.withRed(50),
+                color: Colors.redAccent.withOpacity(.8),
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),

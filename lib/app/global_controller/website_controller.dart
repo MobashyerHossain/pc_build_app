@@ -47,6 +47,11 @@ class WebsiteController extends GetxController {
         );
       },
     );
+
+    Comparator<WebsiteModel> nameComparator =
+        (a, b) => a.name.compareTo(b.name);
+    websites.sort(nameComparator);
+
     return websites.obs;
   }
 }

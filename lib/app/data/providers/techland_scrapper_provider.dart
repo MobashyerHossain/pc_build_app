@@ -70,7 +70,7 @@ class TechlandScrapper with Scrapper {
                   '$siteUrl$localUrl/item$i',
                 ),
                 'title': nameList[i],
-                'url': urlList[i],
+                'url': urlList[i].toString().replaceFirst(siteUrl, ''),
                 'thumb': thumbnailList[i],
                 'price': priceList[i],
               },

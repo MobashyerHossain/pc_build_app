@@ -24,8 +24,8 @@ class MyColorTheme {
 
   static const lightTileBackground = MyColorTheme.light;
   static const darkTileBackground = MyColorTheme.dark;
-  static const light = Colors.lightGreenAccent;
-  static const dark = Colors.deepPurple;
+  static const light = Colors.white70;
+  static const dark = Colors.black87;
 
   static const lightColorScheme = ColorScheme(
     primary: MyColorTheme.dark,
