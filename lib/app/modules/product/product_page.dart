@@ -56,6 +56,7 @@ class ProductPage extends GetView<ProductController> {
                                 child: CircularProgressIndicator(),
                               );
                             } else {
+                              print('Loading Complete');
                               if (_.getHasError()) {
                                 print('haserror');
                                 return Center(
@@ -64,8 +65,8 @@ class ProductPage extends GetView<ProductController> {
                                   ),
                                 );
                               } else {
+                                print('No Error Found');
                                 ScaffoldMessenger.of(context).clearSnackBars();
-                                print('no issue');
                                 return Container(
                                   padding: EdgeInsets.only(
                                     left: 10,

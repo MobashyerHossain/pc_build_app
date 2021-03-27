@@ -99,10 +99,12 @@ class ProductController extends GetxController {
       if (category != null) setCategory(category);
       if (site != null) setSite(site);
 
-      this._products.value = _scrapper.getProducts(
-        page: getPage(),
-        category: getCategory(),
-        site: getSite(),
+      setProducts(
+        _scrapper.getProducts(
+          page: getPage(),
+          category: getCategory(),
+          site: getSite(),
+        ),
       );
       setHasError(false);
       checkNextPage()
