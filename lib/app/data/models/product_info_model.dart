@@ -30,6 +30,10 @@ class ProductInfoModel {
     );
   }
 
+  String getPrice() {
+    return this.price == 0 ? 'Out of\nStock' : 'Tk. ${this.price}';
+  }
+
   static ProductInfoModel sampleModel() {
     return ProductInfoModel(
       id: 'id',

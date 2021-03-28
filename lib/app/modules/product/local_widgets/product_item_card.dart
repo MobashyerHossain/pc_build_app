@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,28 +21,33 @@ class ProductItemCard extends StatelessWidget {
           Positioned(
             left: 0,
             bottom: 0,
-            child: Container(
-              height: 90,
-              width: Get.width / 2.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  colors: Get.isDarkMode
-                      ? <Color>[
-                          Colors.white70,
-                          Colors.white24,
-                        ]
-                      : <Color>[
-                          Colors.black54,
-                          Colors.black26,
-                        ],
-                  tileMode: TileMode.repeated,
+            child: FadeInUp(
+              duration: Duration(
+                milliseconds: 500,
+              ),
+              child: Container(
+                height: 90,
+                width: Get.width / 2.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: Get.isDarkMode
+                        ? <Color>[
+                            Colors.white70,
+                            Colors.white24,
+                          ]
+                        : <Color>[
+                            Colors.black54,
+                            Colors.black26,
+                          ],
+                    tileMode: TileMode.repeated,
+                  ),
                 ),
               ),
             ),
@@ -50,15 +56,18 @@ class ProductItemCard extends StatelessWidget {
             bottom: 45,
             left: 5,
             width: Get.width / 2.5 - 10,
-            child: Text(
-              product.price == 0 ? 'Out of\nStock' : 'Tk. ${product.price}',
-              style: TextStyle(
-                color: Colors.redAccent.withOpacity(.8),
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            child: BounceInDown(
+              delay: Duration(milliseconds: 800),
+              child: Text(
+                product.getPrice(),
+                style: TextStyle(
+                  color: Colors.redAccent.withOpacity(.8),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
             ),
           ),
           Positioned(
@@ -81,61 +90,32 @@ class ProductItemCard extends StatelessWidget {
             right: 10,
             height: 100,
             width: 100,
-            child: Transform.rotate(
-              angle: -math.pi / 11,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-                // child: CachedNetworkImage(
-                //   imageUrl: '${product.thumb}',
-                //   placeholder: (context, url) => CircularProgressIndicator(),
-                //   errorWidget: (context, url, error) {
-                //     return Center(
-                //       child: Icon(
-                //         Icons.error,
-                //       ),
-                //     );
-                //   },
-                //   fit: BoxFit.cover,
-                // ),
-                // child: Image(
-                //   image: ResizeImage(
-                //     CachedNetworkImage(
-                //       imageUrl: '${product.thumb}',
-                //       placeholder: (context, url) =>
-                //           CircularProgressIndicator(),
-                //       errorWidget: (context, url, error) {
-                //         return Center(
-                //           child: Icon(
-                //             Icons.error,
-                //           ),
-                //         );
-                //       },
-                //       fit: BoxFit.cover,
-                //     ),
-                //     width: 100,
-                //     height: 100,
-                //   ),
-                // ),
-                child: CachedNetworkImage(
-                  imageUrl: product.thumb,
-                  imageBuilder: (context, imageProvider) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: ResizeImage(
-                            imageProvider,
-                            width: 100,
-                            height: 100,
+            child: Spin(
+              child: Transform.rotate(
+                angle: -math.pi / 11,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: product.thumb,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: ResizeImage(
+                              imageProvider,
+                              width: 100,
+                              height: 100,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                      );
+                    },
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
               ),
             ),

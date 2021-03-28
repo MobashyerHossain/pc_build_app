@@ -137,14 +137,12 @@ class ProductController extends GetxController {
       if (_page.value > 1) {
         fetchProducts(_page.value - 1, null, null);
       } else {
-        _snackbar('Previous');
         print('Current page ${_page.value} No Prev Page');
       }
     } else {
       if (_nextPageAvailable.value!) {
         fetchProducts(_page.value + 1, null, null);
       } else {
-        _snackbar('Next');
         print('Current page ${_page.value} No Next Page');
       }
       print('page ${_page.value}');
