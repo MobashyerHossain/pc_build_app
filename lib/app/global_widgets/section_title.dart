@@ -6,11 +6,13 @@ class SectionTitle extends StatelessWidget {
   final title;
   final alignment;
   final padding;
+  final textSize;
   const SectionTitle({
     Key? key,
     this.title,
     this.alignment,
     this.padding,
+    this.textSize,
   }) : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class SectionTitle extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-            fontSize: 20,
+            fontSize: textSize * 1.0,
             color: Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
             fontWeight: FontWeight.w400,
           ),

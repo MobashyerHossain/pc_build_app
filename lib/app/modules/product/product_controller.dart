@@ -15,11 +15,7 @@ class ProductController extends GetxController {
   final _site = ''.obs;
   final _category = ''.obs;
   final _page = 1.obs;
-  final _products = Future.value(
-    [
-      ProductInfoModel.sampleModel(),
-    ],
-  ).obs;
+  final _products = List<ProductInfoModel>.empty(growable: true).obs;
 
   final _loading = true.obs;
   final _hasError = false.obs;
@@ -37,7 +33,7 @@ class ProductController extends GetxController {
   getSite() => this._site.value;
 
   setProducts(value) => this._products.value = value;
-  getProducts() => this._products.value;
+  getProducts() => this._products;
 
   getLoading() => this._loading.value;
   setLoading(value) => this._loading.value = value;
@@ -75,53 +71,41 @@ class ProductController extends GetxController {
     print('closed');
   }
 
-  // @override
-  // onReady() {
-  //   super.onReady();
-  //   print('ProductController initiated');
-  //   print(Get.arguments);
-  //   setCategory(Get.arguments);
-
-  //   print('fetching initial data');
-  //   fetchProducts();
-  // }
-
   fetchProducts(
     int? page,
     String? category,
     String? site,
   ) {
-    print('data fetched');
+    print('data fetching for $site $category $page');
+    print('start');
     try {
       setLoading(true);
-
+      _products.clear();
       if (page != null) setPage(page);
       if (category != null) setCategory(category);
       if (site != null) setSite(site);
 
-      setProducts(
-        _scrapper.getProducts(
-          page: getPage(),
-          category: getCategory(),
-          site: getSite(),
-        ),
-      );
-      setHasError(false);
-      checkNextPage()
+      _scrapper
+          .getProducts(
+        page: getPage(),
+        category: getCategory(),
+        site: getSite(),
+      )
           .then(
-            (value) => setNextPageAvailable(value),
-          )
-          .whenComplete(
-            () => print(
-              getNextPageAvailable(),
-            ),
-          );
+        (value) {
+          _products.addAll(value);
+          setLoading(false);
+          print(value.length);
+        },
+      );
+
+      // setProducts();
+      setHasError(false);
     } catch (e) {
       setHasError(true);
-      setError(e);
-    } finally {
-      setLoading(false);
-    }
+      setError(e.toString());
+    } finally {}
+    print('end');
   }
 
   Future<bool> checkNextPage() {
@@ -135,30 +119,18 @@ class ProductController extends GetxController {
   pageChange(String dir) {
     if (dir == 'left') {
       if (_page.value > 1) {
-        setPage(getPage() - 1);
-        Get.toNamed(
-          Routes.PRODUCT,
-        );
-        fetchProducts(null, null, null);
+        fetchProducts(_page.value - 1, null, null);
       } else {
         _snackbar('Previous');
         print('Current page ${_page.value} No Prev Page');
       }
     } else {
-      checkNextPage().then(
-        (value) {
-          if (value) {
-            setPage(getPage() + 1);
-            Get.toNamed(
-              Routes.PRODUCT,
-            );
-            fetchProducts(null, null, null);
-          } else {
-            _snackbar('Next');
-            print('Current page ${_page.value} No Next Page');
-          }
-        },
-      );
+      if (_nextPageAvailable.value!) {
+        fetchProducts(_page.value + 1, null, null);
+      } else {
+        _snackbar('Next');
+        print('Current page ${_page.value} No Next Page');
+      }
       print('page ${_page.value}');
     }
   }

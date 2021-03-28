@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
@@ -88,11 +89,7 @@ class RyansScrapper with Scrapper {
         throw Exception('Api Connection Failed');
       }
     } catch (e) {
-      // Get.to(
-      //   () => ErrorPage(
-      //     error: Exception('Check Your Internet Connection! $e'),
-      //   ),
-      // );
+      print(e);
     }
 
     // Returning ProductInfo List

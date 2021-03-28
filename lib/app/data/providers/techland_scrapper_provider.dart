@@ -88,6 +88,7 @@ class TechlandScrapper with Scrapper {
         throw Exception('Api Connection Failed');
       }
     } catch (e) {
+      print(e);
       // Get.to(
       //   () => ErrorPage(
       //     error: Exception('Check Your Internet Connection! $e'),

@@ -48,6 +48,7 @@ class HomePage extends GetView<HomeController> {
                   title: 'Websites'.toUpperCase(),
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.all(8),
+                  textSize: 18,
                 ),
               ),
               Expanded(
@@ -107,6 +108,7 @@ class HomePage extends GetView<HomeController> {
                   title: 'Categories'.toUpperCase(),
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.all(8),
+                  textSize: 18,
                 ),
               ),
               Expanded(
@@ -131,13 +133,13 @@ class HomePage extends GetView<HomeController> {
                                 if (fabKey.currentState!.isOpen) {
                                   fabKey.currentState!.close();
                                 }
+                                Get.toNamed(
+                                  Routes.PRODUCT,
+                                );
                                 Get.find<ProductController>().fetchProducts(
                                   1,
                                   categories[index].code,
                                   null,
-                                );
-                                Get.toNamed(
-                                  Routes.PRODUCT,
                                 );
                               },
                               child: Center(

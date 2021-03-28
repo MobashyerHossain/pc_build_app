@@ -45,74 +45,124 @@ class ProductPage extends GetView<ProductController> {
                   child: GetX<ProductController>(
                     init: ProductController(),
                     builder: (_) {
-                      return FutureBuilder(
-                        future: _.getProducts(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.data != null) {
-                            if (_.getLoading()) {
-                              print('loading');
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else {
-                              print('Loading Complete');
-                              if (_.getHasError()) {
-                                print('haserror');
-                                return Center(
-                                  child: Text(
-                                    _.getError(),
-                                  ),
-                                );
-                              } else {
-                                print('No Error Found');
-                                ScaffoldMessenger.of(context).clearSnackBars();
-                                return Container(
-                                  padding: EdgeInsets.only(
-                                    left: 10,
-                                    right: 10,
-                                  ),
-                                  child: StaggeredGridView.countBuilder(
-                                    padding: EdgeInsets.only(
-                                      bottom: 70,
-                                      top: 40,
+                      // return FutureBuilder(
+                      //   future: _.getProducts(),
+                      //   builder:
+                      //       (BuildContext context, AsyncSnapshot snapshot) {
+                      //     if (snapshot.data != null) {
+                      //       print(snapshot.data.length);
+                      //       if (_.getLoading()) {
+                      //         print('loading');
+                      //         return Center(
+                      //           child: CircularProgressIndicator(),
+                      //         );
+                      //       } else {
+                      //         print('Loading Complete');
+                      //         if (_.getHasError()) {
+                      //           print('haserror');
+                      //           return Center(
+                      //             child: Text(
+                      //               _.getError(),
+                      //               textAlign: TextAlign.center,
+                      //             ),
+                      //           );
+                      //         } else {
+                      //           print('No Error Found');
+                      //           ScaffoldMessenger.of(context).clearSnackBars();
+                      // return Container(
+                      //   padding: EdgeInsets.only(
+                      //     left: 10,
+                      //     right: 10,
+                      //   ),
+                      //   child: StaggeredGridView.countBuilder(
+                      //     padding: EdgeInsets.only(
+                      //       bottom: 70,
+                      //       top: 40,
+                      //     ),
+                      //     crossAxisCount: 2,
+                      //     itemCount: snapshot.data.length,
+                      //     itemBuilder:
+                      //         (BuildContext context, int index) {
+                      //       return GestureDetector(
+                      //         onTap: () {},
+                      //         child: Center(
+                      //           child: FittedBox(
+                      //             fit: BoxFit.fitWidth,
+                      //             child: SizedBox(
+                      //               width: Get.width / 2.2,
+                      //               height: 160,
+                      //               child: ProductItemCard(
+                      //                 product: snapshot.data[index],
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //     staggeredTileBuilder: (int index) =>
+                      //         new StaggeredTile.count(
+                      //             index % 3 == 2 ? 2 : 1, 1),
+                      //     mainAxisSpacing: 30.0,
+                      //     crossAxisSpacing: 0.0,
+                      //   ),
+                      // );
+                      //         }
+                      //       }
+                      //     } else {
+                      //       return Center(
+                      //         child: CircularProgressIndicator(),
+                      //       );
+                      //     }
+                      //   },
+                      // );
+                      final products = _.getProducts();
+                      if (!_.getLoading()) {
+                        print(_.getLoading());
+                        return Container(
+                          padding: EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                          ),
+                          child: StaggeredGridView.countBuilder(
+                            padding: EdgeInsets.only(
+                              bottom: 70,
+                              top: 40,
+                            ),
+                            crossAxisCount: 2,
+                            itemCount: products.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Center(
+                                  child: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: SizedBox(
+                                      width: Get.width / 2.2,
+                                      height: 160,
+                                      child: ProductItemCard(
+                                        product: products[index],
+                                      ),
                                     ),
-                                    crossAxisCount: 2,
-                                    itemCount: snapshot.data.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return GestureDetector(
-                                        onTap: () {},
-                                        child: Center(
-                                          child: FittedBox(
-                                            fit: BoxFit.fitWidth,
-                                            child: SizedBox(
-                                              width: Get.width / 2.2,
-                                              height: 160,
-                                              child: ProductItemCard(
-                                                product: snapshot.data[index],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    staggeredTileBuilder: (int index) =>
-                                        new StaggeredTile.count(
-                                            index % 3 == 2 ? 2 : 1, 1),
-                                    mainAxisSpacing: 30.0,
-                                    crossAxisSpacing: 0.0,
                                   ),
-                                );
-                              }
-                            }
-                          } else {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
-                      );
+                                ),
+                              );
+                            },
+                            staggeredTileBuilder: (int index) =>
+                                new StaggeredTile.count(
+                                    index % 3 == 0 ? 2 : 1, 1),
+                            mainAxisSpacing: 30.0,
+                            crossAxisSpacing: 0.0,
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Get.isDarkMode
+                                ? MyColorTheme.dark
+                                : MyColorTheme.light,
+                          ),
+                        );
+                      }
                     },
                   ),
                 ),
@@ -154,18 +204,20 @@ class ProductPage extends GetView<ProductController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SectionTitle(
-                        title: controller
+                        title: _
                             .getCategory()
                             .toString()
                             .replaceAll('_', ' ')
                             .toUpperCase(),
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.all(8),
+                        textSize: 15,
                       ),
                       SectionTitle(
                         title: "Page ${_.getPage()}",
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.all(8),
+                        textSize: 15,
                       ),
                     ],
                   );
@@ -209,7 +261,7 @@ class PageChangeIndicator extends StatelessWidget {
               color: Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
             ),
             onPressed: () {
-              ProductsPageSplashScreen(context);
+              // ProductsPageSplashScreen(context);
               controller.pageChange(pageChangeDirection);
             },
           ),
