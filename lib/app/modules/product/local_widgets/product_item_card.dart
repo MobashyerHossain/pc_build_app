@@ -121,17 +121,19 @@ class ProductItemCard extends StatelessWidget {
                 // ),
                 child: CachedNetworkImage(
                   imageUrl: product.thumb,
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: ResizeImage(
-                          imageProvider,
-                          width: 100,
-                          height: 100,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: ResizeImage(
+                            imageProvider,
+                            width: 100,
+                            height: 100,
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                 ),

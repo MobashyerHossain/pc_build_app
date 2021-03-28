@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -6,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
 import 'package:pc_build_app/app/global_widgets/section_title.dart';
+import 'package:pc_build_app/app/modules/product/local_widgets/page_change_indicator.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/product_item_card.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -117,7 +117,6 @@ class ProductPage extends GetView<ProductController> {
                       // );
                       final products = _.getProducts();
                       if (!_.getLoading()) {
-                        print(_.getLoading());
                         return Container(
                           padding: EdgeInsets.only(
                             left: 10,
@@ -169,29 +168,51 @@ class ProductPage extends GetView<ProductController> {
               ),
             ),
             Positioned(
-              top: Get.height / 2 - 30,
-              right: -10,
-              child: PageChangeIndicator(
-                icon: Icons.keyboard_arrow_right,
-                pageChangeDirection: 'right',
-                controller: controller,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  bottomLeft: Radius.circular(30),
-                ),
+              top: Get.height / 1.6,
+              right: -23,
+              child: Obx(
+                () {
+                  final c = Get.find<ProductController>();
+                  print(c.getNextPageAvailable());
+
+                  if (c.getNextPageAvailable()) {
+                    return PageChangeIndicator(
+                      icon: Icons.keyboard_arrow_right,
+                      pageChangeDirection: 'right',
+                      controller: controller,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        bottomLeft: Radius.circular(30),
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Positioned(
-              top: Get.height / 2 - 30,
-              left: -10,
-              child: PageChangeIndicator(
-                icon: Icons.keyboard_arrow_left,
-                pageChangeDirection: 'left',
-                controller: controller,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
+              top: Get.height / 1.6,
+              left: -23,
+              child: Obx(
+                () {
+                  final c = Get.find<ProductController>();
+                  print(c.getNextPageAvailable());
+
+                  if (c.getPrevPageAvailable()) {
+                    return PageChangeIndicator(
+                      icon: Icons.keyboard_arrow_left,
+                      pageChangeDirection: 'left',
+                      controller: controller,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
             Positioned(
@@ -225,70 +246,6 @@ class ProductPage extends GetView<ProductController> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class PageChangeIndicator extends StatelessWidget {
-  final icon;
-  final pageChangeDirection;
-  final controller;
-  final borderRadius;
-  const PageChangeIndicator({
-    Key? key,
-    this.icon,
-    this.pageChangeDirection,
-    this.controller,
-    this.borderRadius,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dance(
-      child: BounceInUp(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: borderRadius,
-            color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-          ),
-          child: IconButton(
-            tooltip: 'Next Page',
-            icon: Icon(
-              icon,
-              size: 30,
-              color: Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
-            ),
-            onPressed: () {
-              // ProductsPageSplashScreen(context);
-              controller.pageChange(pageChangeDirection);
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ignore: non_constant_identifier_names
-  void ProductsPageSplashScreen(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(
-          seconds: 3,
-        ),
-        backgroundColor: Get.isDarkMode
-            ? MyColorTheme.dark.withOpacity(0.6)
-            : MyColorTheme.light.withOpacity(0.6),
-        content: Container(
-          decoration: BoxDecoration(
-              // color:
-              ),
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-            ),
-          ),
         ),
       ),
     );

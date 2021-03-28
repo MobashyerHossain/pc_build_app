@@ -1,9 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
-import 'package:pc_build_app/app/data/services/bottom_bar_service.dart';
+import 'package:pc_build_app/app/data/services/site_change_service.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
 import 'package:pc_build_app/app/global_widgets/section_title.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
@@ -52,36 +53,36 @@ class HomePage extends GetView<HomeController> {
                 ),
               ),
               Expanded(
-                flex: 3,
-                child: GetX<HomeController>(
-                  init: HomeController(),
+                flex: 2,
+                child: GetX<ProductController>(
+                  init: ProductController(),
                   builder: (_) {
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: _.getWebsites().length,
                       itemBuilder: (context, index) {
                         final _sites = _.getWebsites();
-                        var _selected = BottomBarService().index == null
-                            ? _.getSite()
-                            : BottomBarService().index;
+                        var _selected = SiteChangeService().index;
                         return GestureDetector(
-                          child: Container(
-                            width: Get.width / 3,
-                            child: Center(
-                              child: SizedBox(
-                                height: 150,
-                                child: Card(
-                                  color: Get.isDarkMode
-                                      ? _selected == index
-                                          ? MyColorTheme.light.withOpacity(.4)
-                                          : MyColorTheme.light.withOpacity(.2)
-                                      : _selected == index
-                                          ? MyColorTheme.dark.withOpacity(.4)
-                                          : MyColorTheme.dark.withOpacity(.2),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image(
-                                      image: AssetImage(_sites[index].logo),
+                          child: ZoomIn(
+                            child: Container(
+                              width: Get.width / 3,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 130,
+                                  child: Card(
+                                    color: Get.isDarkMode
+                                        ? _selected == index
+                                            ? MyColorTheme.light.withOpacity(.4)
+                                            : MyColorTheme.light.withOpacity(.2)
+                                        : _selected == index
+                                            ? MyColorTheme.dark.withOpacity(.4)
+                                            : MyColorTheme.dark.withOpacity(.2),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Image(
+                                        image: AssetImage(_sites[index].logo),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -89,11 +90,11 @@ class HomePage extends GetView<HomeController> {
                             ),
                           ),
                           onTap: () {
-                            BottomBarService().switchIndex(
+                            SiteChangeService().switchIndex(
                               index,
                             );
-                            _.setSite(index);
-                            print(index);
+                            _.setSite(_sites[index].code);
+                            print(_sites[index].name);
                             Get.appUpdate();
                           },
                         );
@@ -143,14 +144,11 @@ class HomePage extends GetView<HomeController> {
                                 );
                               },
                               child: Center(
-                                child: FittedBox(
-                                  fit: BoxFit.fitHeight,
-                                  child: SizedBox(
-                                    width: Get.width / 2.5,
-                                    height: 170,
-                                    child: ItemCard(
-                                      category: categories[index],
-                                    ),
+                                child: SizedBox(
+                                  width: Get.width / 2.5,
+                                  height: 170,
+                                  child: ItemCard(
+                                    category: categories[index],
                                   ),
                                 ),
                               ),

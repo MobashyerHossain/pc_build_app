@@ -2,26 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
+import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
+import 'package:pc_build_app/app/data/models/product_page_model.dart';
+import 'package:pc_build_app/app/data/models/website_model.dart';
 import 'package:pc_build_app/app/data/repositories/scrapping_repository.dart';
-import 'package:pc_build_app/app/data/services/bottom_bar_service.dart';
-import 'package:pc_build_app/app/routes/app_pages.dart';
+import 'package:pc_build_app/app/data/services/site_change_service.dart';
+import 'package:pc_build_app/app/global_controller/website_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ProductController extends GetxController {
   final ScrappingRepository _scrapper = Get.find<ScrappingRepository>();
+  final _productPage = ProductPageModel.sampleModel().obs;
   // site >> category >> page >> products
 
   final _site = ''.obs;
   final _category = ''.obs;
   final _page = 1.obs;
-  final _products = List<ProductInfoModel>.empty(growable: true).obs;
+  final _products = List<ProductInfoModel>.empty().obs;
+  final _brands = List<BrandModel>.empty().obs;
 
   final _loading = true.obs;
   final _hasError = false.obs;
   final _error = ''.obs;
 
-  final _nextPageAvailable = true.obs;
+  final _nextPageAvailable = false.obs;
+  final _prevPageAvailable = false.obs;
 
   setPage(value) => this._page.value = value;
   getPage() => this._page.value;
@@ -32,8 +38,14 @@ class ProductController extends GetxController {
   setSite(value) => this._site.value = value;
   getSite() => this._site.value;
 
+  setProductPage(value) => this._productPage.value = value;
+  getProductPage() => this._productPage;
+
   setProducts(value) => this._products.value = value;
   getProducts() => this._products;
+
+  setBrands(value) => this._brands.value = value;
+  getBrands() => this._brands;
 
   getLoading() => this._loading.value;
   setLoading(value) => this._loading.value = value;
@@ -45,24 +57,23 @@ class ProductController extends GetxController {
   getNextPageAvailable() => this._nextPageAvailable.value;
   setNextPageAvailable(value) => this._nextPageAvailable.value = value;
 
+  getPrevPageAvailable() => this._prevPageAvailable.value;
+  setPrevPageAvailable(value) => this._prevPageAvailable.value = value;
+
   // ProductController() {
   //   setSite(ScrapperConstants.WEBSITE_LIST[BottomBarService().index]);
   //   print('lalala');
   // }
 
   @override
-  onInit() {
-    super.onInit();
-    var _tempSite = ScrapperConstants.WEBSITE_LIST.entries
-        .elementAt(BottomBarService().index)
-        .key;
-    setSite(_tempSite);
-  }
-
-  @override
   onReady() {
     super.onReady();
-    print('dsfdf');
+    print('ProductController Ready');
+    var _tempSite = ScrapperConstants.WEBSITE_LIST.entries
+        .elementAt(SiteChangeService().index)
+        .key;
+    setSite(_tempSite);
+    print('Current Site : $_tempSite / ${this.getSite()}');
   }
 
   @override
@@ -72,18 +83,22 @@ class ProductController extends GetxController {
   }
 
   fetchProducts(
-    int? page,
-    String? category,
-    String? site,
+    int? temPage,
+    String? temCategory,
+    String? temSite,
   ) {
-    print('data fetching for $site $category $page');
-    print('start');
+    if (temPage != null) setPage(temPage);
+    if (temCategory != null) setCategory(temCategory);
+    if (temSite != null) setSite(temSite);
+    setNextPageAvailable(false);
+    setPrevPageAvailable(false);
+
+    print(
+      'Data Fetching for -->\n${this.getSite()} - ${this.getCategory()} - ${this.getPage()}',
+    );
+    print('Start Fetching');
     try {
       setLoading(true);
-      _products.clear();
-      if (page != null) setPage(page);
-      if (category != null) setCategory(category);
-      if (site != null) setSite(site);
 
       _scrapper
           .getProducts(
@@ -93,9 +108,19 @@ class ProductController extends GetxController {
       )
           .then(
         (value) {
-          _products.addAll(value);
+          setProductPage(value);
+
+          setSite(value.website);
+          setCategory(value.category);
+          setPage(value.page);
+          setProducts(value.productList);
+          setBrands(value.brandList);
+          setNextPageAvailable(value.nextPageAvailable);
+          setPrevPageAvailable(value.previousPageAvailable);
           setLoading(false);
-          print(value.length);
+          Get.appUpdate();
+
+          print('End Fetching');
         },
       );
 
@@ -105,15 +130,6 @@ class ProductController extends GetxController {
       setHasError(true);
       setError(e.toString());
     } finally {}
-    print('end');
-  }
-
-  Future<bool> checkNextPage() {
-    return _scrapper.checkNextPageAvailibility(
-      page: getPage() + 1,
-      category: getCategory(),
-      site: getSite(),
-    );
   }
 
   pageChange(String dir) {
@@ -212,5 +228,9 @@ class ProductController extends GetxController {
         seconds: 2,
       ),
     );
+  }
+
+  List<WebsiteModel> getWebsites() {
+    return Get.find<WebsiteController>().getWebSites();
   }
 }

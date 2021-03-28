@@ -1,5 +1,7 @@
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
+import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
+import 'package:pc_build_app/app/data/models/product_page_model.dart';
 import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
@@ -20,6 +22,8 @@ class TechlandScrapper with Scrapper {
     final thumbnailList = [];
     final priceList = [];
     List<ProductInfoModel> productList = [];
+    List<BrandModel> brandList = [];
+    ProductPageModel productPage = ProductPageModel.sampleModel();
 
     var uuid = Uuid();
 
@@ -60,6 +64,45 @@ class TechlandScrapper with Scrapper {
           priceList.add(price);
         });
 
+        // Populating Brand Model
+        var brandName = webScraper.getElement(
+          'div.refine-items > div.refine-item > a > span.refine-name > span.links-text',
+          [],
+        );
+
+        webScraper
+            .getElement(
+              'div.refine-items > div.refine-item > a',
+              ['href'],
+            )
+            .asMap()
+            .forEach(
+              (index, element) {
+                final brand = BrandModel(
+                  name: brandName[index].toString(),
+                  url: element['attributes']['href'].toString().replaceAll(
+                        this.siteUrl,
+                        '',
+                      ),
+                );
+                brandList.add(brand);
+              },
+            );
+
+        // checking previous page
+        bool prevCheck = webScraper.getElement(
+              'li > a.prev',
+              [],
+            ).length >
+            0;
+
+        // checking next page
+        bool nextCheck = webScraper.getElement(
+              'li > a.next',
+              [],
+            ).length >
+            0;
+
         // Populating ProductInfo List
         for (var i = 0; i < nameList.length; i++) {
           productList.add(
@@ -78,10 +121,21 @@ class TechlandScrapper with Scrapper {
           );
         }
 
+        productPage = ProductPageModel(
+          page: page,
+          nextPageAvailable: nextCheck,
+          previousPageAvailable: prevCheck,
+          category: category,
+          website: 'techland',
+          productList: productList,
+          brandList: brandList,
+        );
+
         // For Debugging
         // productList.forEach((element) {
         //   print(element);
         // });
+        // print(productPage);
         print('Scrapping Succesful');
       } else {
         print('Scrapping Unsuccesful');
@@ -97,34 +151,6 @@ class TechlandScrapper with Scrapper {
     }
 
     // Returning ProductInfo List
-    return productList;
-  }
-
-  @override
-  checkNextPage({required category, required page}) async {
-    WebScraper webScraper = WebScraper(siteUrl);
-
-    try {
-      var url = localUrl
-          .replaceAll('[1]', '${categoryUrls[category]}')
-          .replaceAll('[2]', '$page');
-
-      if (await webScraper.loadWebPage(url)) {
-        var prices = webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.caption > div.price > span.price-tax',
-          [],
-        );
-
-        if (prices.length > 0) {
-          return Future<bool>.value(true);
-        } else {
-          return Future<bool>.value(false);
-        }
-      } else {
-        return Future<bool>.value(false);
-      }
-    } catch (e) {
-      return Future<bool>.value(false);
-    }
+    return productPage;
   }
 }

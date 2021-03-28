@@ -9,11 +9,10 @@ class Services {
         final _box = GetStorage();
 
         final _theme = 'isDarkMode';
-        final _barIndex = 'bottomBarIndex';
+        final _site = 'site';
 
         _box.writeIfNull(_theme, true);
-        _box.writeIfNull(_barIndex, 1);
-        print(_box.toString());
+        _box.writeIfNull(_site, 1);
       });
     });
 

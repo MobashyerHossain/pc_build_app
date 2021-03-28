@@ -1,8 +1,8 @@
 import 'package:get_storage/get_storage.dart';
 
-class BottomBarService {
+class SiteChangeService {
   final _box = GetStorage();
-  final _key = 'bottomBarIndex';
+  final _key = 'site';
 
   /// Get isDarkMode info from local storage and return ThemeMode
   get index => _loadIndexFromBox();
@@ -20,8 +20,5 @@ class BottomBarService {
       i = index;
     }
     _saveIndexToBox(i);
-    Future.delayed(
-      Duration(milliseconds: 200),
-    );
   }
 }

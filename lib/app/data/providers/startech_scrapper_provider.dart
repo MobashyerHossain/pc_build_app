@@ -1,5 +1,7 @@
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
+import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
+import 'package:pc_build_app/app/data/models/product_page_model.dart';
 import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
@@ -12,7 +14,10 @@ class StartechScrapper with Scrapper {
   }
 
   @override
-  getProducts({required category, required page}) async {
+  getProducts({
+    required category,
+    required page,
+  }) async {
     WebScraper webScraper = WebScraper(siteUrl);
 
     final nameList = [];
@@ -20,6 +25,8 @@ class StartechScrapper with Scrapper {
     final thumbnailList = [];
     final priceList = [];
     List<ProductInfoModel> productList = [];
+    List<BrandModel> brandList = [];
+    ProductPageModel productPage = ProductPageModel.sampleModel();
 
     var uuid = Uuid();
 
@@ -33,21 +40,25 @@ class StartechScrapper with Scrapper {
         webScraper.getElement(
           'h4.product-name > a',
           ['href'],
-        ).forEach((element) {
-          final name = element['title'];
-          final url = element['attributes']['href'];
-          nameList.add(name);
-          urlList.add(url);
-        });
+        ).forEach(
+          (element) {
+            final name = element['title'];
+            final url = element['attributes']['href'];
+            nameList.add(name);
+            urlList.add(url);
+          },
+        );
 
         // Scrapping Thumbnail
         webScraper.getElement(
           'div.product-thumb > div.img-holder > a > img',
           ['src'],
-        ).forEach((element) {
-          final thumbnail = element['attributes']['src'];
-          thumbnailList.add(thumbnail);
-        });
+        ).forEach(
+          (element) {
+            final thumbnail = element['attributes']['src'];
+            thumbnailList.add(thumbnail);
+          },
+        );
 
         // Scrapping Price
         webScraper
@@ -56,14 +67,45 @@ class StartechScrapper with Scrapper {
               [],
             )
             .asMap()
-            .forEach((index, element) {
-              if (index % 2 == 0) {
-                final price = int.parse(
-                  element['title'].replaceAll(RegExp('[^0-9]'), ''),
-                );
-                priceList.add(price);
-              }
-            });
+            .forEach(
+              (index, element) {
+                if (index % 2 == 0) {
+                  final price = int.parse(
+                    element['title'].replaceAll(RegExp('[^0-9]'), ''),
+                  );
+                  priceList.add(price);
+                }
+              },
+            );
+
+        // Populating Brand Model
+        webScraper.getElement(
+          'div.product-listing > div.child-list > a',
+          ['href'],
+        ).forEach(
+          (element) {
+            final brand = BrandModel(
+              name: element['title'],
+              url: element['attributes']['href'].toString().replaceAll(
+                    this.siteUrl,
+                    '',
+                  ),
+            );
+            brandList.add(brand);
+          },
+        );
+
+        // checking previous page
+        bool prevCheck = !webScraper.getElement(
+          'li > span.disabled',
+          [],
+        ).any((element) => element['title'] == 'PREV');
+
+        // checking next page
+        bool nextCheck = !webScraper.getElement(
+          'li > span.disabled',
+          [],
+        ).any((element) => element['title'] == 'NEXT');
 
         // Populating ProductInfo List
         for (var i = 0; i < nameList.length; i++) {
@@ -83,10 +125,21 @@ class StartechScrapper with Scrapper {
           );
         }
 
+        productPage = ProductPageModel(
+          page: page,
+          nextPageAvailable: nextCheck,
+          previousPageAvailable: prevCheck,
+          category: category,
+          website: 'startech',
+          productList: productList,
+          brandList: brandList,
+        );
+
         // For Debugging
         // productList.forEach((element) {
         //   print(element);
         // });
+        // print(productPage);
         print('Scrapping Succesful');
       } else {
         print('Scrapping Unsuccesful');
@@ -102,34 +155,6 @@ class StartechScrapper with Scrapper {
     }
 
     // Returning ProductInfo List
-    return productList;
-  }
-
-  @override
-  checkNextPage({required category, required page}) async {
-    WebScraper webScraper = WebScraper(siteUrl);
-
-    try {
-      var url = localUrl
-          .replaceAll('[1]', '${categoryUrls[category]}')
-          .replaceAll('[2]', '$page');
-
-      if (await webScraper.loadWebPage(url)) {
-        var prices = webScraper.getElement(
-          'div.price > span',
-          [],
-        );
-
-        if (prices.length > 0) {
-          return Future<bool>.value(true);
-        } else {
-          return Future<bool>.value(false);
-        }
-      } else {
-        return Future<bool>.value(false);
-      }
-    } catch (e) {
-      return Future<bool>.value(false);
-    }
+    return productPage;
   }
 }

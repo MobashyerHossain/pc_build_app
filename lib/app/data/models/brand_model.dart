@@ -8,6 +8,13 @@ class BrandModel {
     required this.url,
   });
 
+  static BrandModel sampleModel() {
+    return BrandModel(
+      name: 'Asrock',
+      url: 'abs.org',
+    );
+  }
+
   BrandModel copyWith({
     String? name,
     String? url,

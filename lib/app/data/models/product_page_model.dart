@@ -6,28 +6,53 @@ import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 
 class ProductPageModel {
-  int pageNo;
+  int page;
+
   bool nextPageAvailable;
   bool previousPageAvailable;
+  String category;
+  String website;
   List<ProductInfoModel> productList;
   List<BrandModel> brandList;
   ProductPageModel({
-    required this.pageNo,
+    required this.page,
     required this.nextPageAvailable,
     required this.previousPageAvailable,
+    required this.category,
+    required this.website,
     required this.productList,
     required this.brandList,
   });
 
+  static ProductPageModel sampleModel() {
+    return ProductPageModel(
+      page: 1,
+      category: 'casing',
+      website: 'ryans',
+      nextPageAvailable: false,
+      previousPageAvailable: false,
+      productList: [
+        ProductInfoModel.sampleModel(),
+      ],
+      brandList: [
+        BrandModel.sampleModel(),
+      ],
+    );
+  }
+
   ProductPageModel copyWith({
-    int? pageNo,
+    int? page,
+    String? category,
+    String? website,
     bool? nextPageAvailable,
     bool? previousPageAvailable,
     List<ProductInfoModel>? productList,
     List<BrandModel>? brandList,
   }) {
     return ProductPageModel(
-      pageNo: pageNo ?? this.pageNo,
+      page: page ?? this.page,
+      category: category ?? this.category,
+      website: website ?? this.website,
       nextPageAvailable: nextPageAvailable ?? this.nextPageAvailable,
       previousPageAvailable:
           previousPageAvailable ?? this.previousPageAvailable,
@@ -38,7 +63,9 @@ class ProductPageModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'pageNo': pageNo,
+      'page': page,
+      'category': category,
+      'website': website,
       'nextPageAvailable': nextPageAvailable,
       'previousPageAvailable': previousPageAvailable,
       'productList': productList.map((x) => x.toMap()).toList(),
@@ -48,19 +75,15 @@ class ProductPageModel {
 
   factory ProductPageModel.fromMap(Map<String, dynamic> map) {
     return ProductPageModel(
-      pageNo: map['pageNo'],
+      page: map['page'],
+      category: map['category'],
+      website: map['website'],
       nextPageAvailable: map['nextPageAvailable'],
       previousPageAvailable: map['previousPageAvailable'],
       productList: List<ProductInfoModel>.from(
-        map['productList']?.map(
-          (x) => ProductInfoModel.fromMap(x),
-        ),
-      ),
+          map['productList']?.map((x) => ProductInfoModel.fromMap(x))),
       brandList: List<BrandModel>.from(
-        map['brandList']?.map(
-          (x) => BrandModel.fromMap(x),
-        ),
-      ),
+          map['brandList']?.map((x) => BrandModel.fromMap(x))),
     );
   }
 
@@ -71,7 +94,7 @@ class ProductPageModel {
 
   @override
   String toString() {
-    return 'ProductPageModel(pageNo: $pageNo, nextPageAvailable: $nextPageAvailable, previousPageAvailable: $previousPageAvailable, productList: $productList, brandList: $brandList)';
+    return 'ProductPageModel(page: $page, category: $category, website: $website, nextPageAvailable: $nextPageAvailable, previousPageAvailable: $previousPageAvailable, productList: $productList, brandList: $brandList)';
   }
 
   @override
@@ -79,7 +102,9 @@ class ProductPageModel {
     if (identical(this, other)) return true;
 
     return other is ProductPageModel &&
-        other.pageNo == pageNo &&
+        other.page == page &&
+        other.category == category &&
+        other.website == website &&
         other.nextPageAvailable == nextPageAvailable &&
         other.previousPageAvailable == previousPageAvailable &&
         listEquals(other.productList, productList) &&
@@ -88,7 +113,9 @@ class ProductPageModel {
 
   @override
   int get hashCode {
-    return pageNo.hashCode ^
+    return page.hashCode ^
+        category.hashCode ^
+        website.hashCode ^
         nextPageAvailable.hashCode ^
         previousPageAvailable.hashCode ^
         productList.hashCode ^

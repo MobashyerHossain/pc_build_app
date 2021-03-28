@@ -1,15 +1,15 @@
 class ScrapperConstants {
   // Website List
   static const WEBSITE_LIST = {
-    'startech': 'Star Tech',
     'ryans': 'Ryans Computers',
+    'startech': 'Star Tech',
     'techland': 'Techland BD'
   };
 
   // Category List
   static const CATEGORY_LIST = {
-    'startech': ScrapperConstants.STARTECH_CATEGORY_LIST,
     'ryans': ScrapperConstants.RYANS_CATEGORY_LIST,
+    'startech': ScrapperConstants.STARTECH_CATEGORY_LIST,
     'techland': ScrapperConstants.TECHLAND_CATEGORY_LIST,
   };
 
