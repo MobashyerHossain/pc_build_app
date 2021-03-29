@@ -6,12 +6,14 @@ class ProductInfoModel {
   String url;
   String thumb;
   int price;
+  String spacialNote;
   ProductInfoModel({
     required this.id,
     required this.title,
     required this.url,
     required this.thumb,
     required this.price,
+    required this.spacialNote,
   });
 
   ProductInfoModel copyWith({
@@ -20,6 +22,7 @@ class ProductInfoModel {
     String? url,
     String? thumb,
     int? price,
+    String? spacialNote,
   }) {
     return ProductInfoModel(
       id: id ?? this.id,
@@ -27,11 +30,12 @@ class ProductInfoModel {
       url: url ?? this.url,
       thumb: thumb ?? this.thumb,
       price: price ?? this.price,
+      spacialNote: spacialNote ?? this.spacialNote,
     );
   }
 
   String getPrice() {
-    return this.price == 0 ? 'Out of\nStock' : 'Tk. ${this.price}';
+    return this.price == 0 ? 'Price: N/A' : 'Tk. ${this.price}';
   }
 
   static ProductInfoModel sampleModel() {
@@ -41,6 +45,7 @@ class ProductInfoModel {
       url: 'url.com',
       thumb: 'thum.com',
       price: 0,
+      spacialNote: '',
     );
   }
 
@@ -51,6 +56,7 @@ class ProductInfoModel {
       'url': url,
       'thumb': thumb,
       'price': price,
+      'spacialNote': spacialNote,
     };
   }
 
@@ -61,6 +67,7 @@ class ProductInfoModel {
       url: map['url'],
       thumb: map['thumb'],
       price: map['price'],
+      spacialNote: map['spacialNote'],
     );
   }
 
@@ -71,7 +78,7 @@ class ProductInfoModel {
 
   @override
   String toString() {
-    return 'BasicProductModel(id: $id, title: $title, url: $url, thumb: $thumb, price: $price)';
+    return 'ProductInfoModel(id: $id, title: $title, url: $url, thumb: $thumb, price: $price, spacialNote: $spacialNote)';
   }
 
   @override
@@ -83,7 +90,8 @@ class ProductInfoModel {
         other.title == title &&
         other.url == url &&
         other.thumb == thumb &&
-        other.price == price;
+        other.price == price &&
+        other.spacialNote == spacialNote;
   }
 
   @override
@@ -92,6 +100,7 @@ class ProductInfoModel {
         title.hashCode ^
         url.hashCode ^
         thumb.hashCode ^
-        price.hashCode;
+        price.hashCode ^
+        spacialNote.hashCode;
   }
 }

@@ -38,6 +38,15 @@ class HomePage extends GetView<HomeController> {
               tileMode: TileMode.clamp,
             ),
           ),
+          // child: CustomScrollView(
+          //   slivers: [
+          //     SliverLayoutBuilder(
+          //       builder: (context, constraints) => {
+          //         return Container(Text('fgdfg')),
+          //       },
+          //     ),
+          //   ],
+          // ),
           child: Column(
             children: [
               SizedBox(

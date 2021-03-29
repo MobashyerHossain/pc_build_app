@@ -1,8 +1,10 @@
+import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
 import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/models/product_page_model.dart';
 import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
+import 'package:pc_build_app/app/routes/app_pages.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
 
@@ -17,10 +19,11 @@ class RyansScrapper with Scrapper {
   getProducts({required category, required page}) async {
     WebScraper webScraper = WebScraper(siteUrl);
 
-    final nameList = [];
+    final titleList = [];
     final urlList = [];
     final thumbnailList = [];
     final priceList = [];
+    final labelList = [];
     List<ProductInfoModel> productList = [];
     List<BrandModel> brandList = [];
     ProductPageModel productPage = ProductPageModel.sampleModel();
@@ -39,9 +42,9 @@ class RyansScrapper with Scrapper {
           ['href'],
         ).forEach(
           (element) {
-            final name = element['title'];
+            final title = element['title'];
             final url = element['attributes']['href'];
-            nameList.add(name);
+            titleList.add(title);
             urlList.add(url);
           },
         );
@@ -67,6 +70,28 @@ class RyansScrapper with Scrapper {
               element['title'].replaceAll(RegExp('[^0-9]'), ''),
             );
             priceList.add(price);
+          },
+        );
+
+        // // Product Label
+        webScraper.getElement(
+          'div.product-box > div.product-thumb',
+          [],
+        ).forEach(
+          (element) {
+            final temp = element.toString().toLowerCase();
+            var label = '';
+            if (temp.contains('out of stock')) {
+              label = 'Out of Stock';
+            } else if (temp.contains('up coming')) {
+              label = 'Upcoming';
+            } else if (temp.contains('call for price')) {
+              label = 'Call for Price';
+            } else {
+              label = '';
+            }
+
+            labelList.add(label);
           },
         );
 
@@ -115,19 +140,18 @@ class RyansScrapper with Scrapper {
         ).any((element) => element['attributes']['aria-label'] == 'Next »');
 
         // Populating ProductInfo List
-        for (var i = 0; i < nameList.length; i++) {
+        for (var i = 0; i < titleList.length; i++) {
           productList.add(
-            ProductInfoModel.fromMap(
-              {
-                'id': uuid.v5(
-                  Uuid.NAMESPACE_URL,
-                  '$siteUrl$localUrl/item$i',
-                ),
-                'title': nameList[i],
-                'url': urlList[i].toString().replaceFirst(siteUrl, ''),
-                'thumb': thumbnailList[i],
-                'price': priceList[i],
-              },
+            ProductInfoModel(
+              id: uuid.v5(
+                Uuid.NAMESPACE_URL,
+                '$siteUrl$localUrl/item$i',
+              ),
+              title: titleList[i],
+              url: urlList[i].toString().replaceFirst(siteUrl, ''),
+              thumb: thumbnailList[i],
+              price: priceList[i],
+              spacialNote: labelList[i],
             ),
           );
         }
@@ -154,6 +178,12 @@ class RyansScrapper with Scrapper {
       }
     } catch (e) {
       print(e);
+      Get.offNamed(
+        Routes.ERROR,
+        parameters: {
+          'error': e.toString(),
+        },
+      );
     }
 
     // Returning ProductInfo List

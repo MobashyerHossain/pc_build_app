@@ -23,7 +23,9 @@ class SectionTitle extends StatelessWidget {
       alignment: alignment,
       child: Container(
         decoration: BoxDecoration(
-          color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
+          color: Get.isDarkMode
+              ? MyColorTheme.light.withOpacity(.5)
+              : MyColorTheme.dark.withOpacity(.5),
           borderRadius: BorderRadius.all(
             Radius.circular(30),
           ),
@@ -37,7 +39,7 @@ class SectionTitle extends StatelessWidget {
           style: TextStyle(
             fontSize: textSize * 1.0,
             color: Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),

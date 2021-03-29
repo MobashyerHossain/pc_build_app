@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:pc_build_app/app/modules/error/error_page.dart';
 import 'package:pc_build_app/app/modules/home/home_binding.dart';
 import 'package:pc_build_app/app/modules/home/home_page.dart';
 import 'package:pc_build_app/app/modules/product/product_binding.dart';
@@ -19,12 +20,19 @@ abstract class AppPages {
       name: Routes.HOME,
       page: () => HomePage(),
       binding: HomeBinding(),
-      transition: Transition.zoom,
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.PRODUCT,
       page: () => ProductPage(),
       binding: ProductBinding(),
+      transition: Transition.zoom,
+    ),
+    GetPage(
+      name: Routes.ERROR,
+      page: () => ErrorPage(
+        error: Get.parameters['error'],
+      ),
       transition: Transition.zoom,
     ),
   ];

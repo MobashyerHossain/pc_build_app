@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
 import 'package:pc_build_app/app/data/models/brand_model.dart';
+import 'package:pc_build_app/app/data/models/category_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/models/product_page_model.dart';
 import 'package:pc_build_app/app/data/models/website_model.dart';
 import 'package:pc_build_app/app/data/repositories/scrapping_repository.dart';
 import 'package:pc_build_app/app/data/services/site_change_service.dart';
 import 'package:pc_build_app/app/global_controller/website_controller.dart';
+import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ProductController extends GetxController {
@@ -157,78 +157,11 @@ class ProductController extends GetxController {
     }
   }
 
-  _snackbar(String dir) {
-    Get.snackbar(
-      '',
-      '',
-      backgroundColor: Colors.grey.withOpacity(.5),
-      titleText: Text(
-        'Page ${getPage()}',
-        textScaleFactor: 2,
-        style: TextStyle(
-          color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      messageText: Text(
-        'No $dir Page Available',
-        textScaleFactor: 1.5,
-        style: TextStyle(
-          color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      showProgressIndicator: true,
-      duration: Duration(
-        seconds: 2,
-      ),
-    );
-  }
-
-  snackbarForAll() {
-    var title;
-    var message;
-    if (getPage() == 1) {
-      title =
-          'Welcome To ${ScrapperConstants.WEBSITE_LIST[getSite().toString()]}';
-      message =
-          '${getCategory().toString().replaceAll('_', ' ').capitalize}\nPage ${getPage()}';
-    } else {
-      title = '${getCategory().toString().replaceAll('_', ' ').capitalize}';
-      message =
-          'Page ${getPage()}\n${ScrapperConstants.WEBSITE_LIST[getSite().toString()]}';
-    }
-
-    Get.snackbar(
-      '',
-      '',
-      backgroundColor: Get.isDarkMode
-          ? MyColorTheme.dark.withOpacity(.5)
-          : MyColorTheme.light.withOpacity(.5),
-      titleText: Text(
-        title,
-        textScaleFactor: 2,
-        style: TextStyle(
-          color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      messageText: Text(
-        message,
-        textScaleFactor: 1.5,
-        style: TextStyle(
-          color: Get.isDarkMode ? MyColorTheme.light : MyColorTheme.dark,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      showProgressIndicator: true,
-      duration: Duration(
-        seconds: 2,
-      ),
-    );
-  }
-
   List<WebsiteModel> getWebsites() {
     return Get.find<WebsiteController>().getWebSites();
+  }
+
+  List<CategoryModel> getCatrgories() {
+    return Get.find<HomeController>().getCategories();
   }
 }

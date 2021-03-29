@@ -57,12 +57,12 @@ class ProductItemCard extends StatelessWidget {
             left: 5,
             width: Get.width / 2.5 - 10,
             child: BounceInDown(
-              delay: Duration(milliseconds: 800),
+              delay: Duration(milliseconds: 600),
               child: Text(
                 product.getPrice(),
                 style: TextStyle(
-                  color: Colors.redAccent.withOpacity(.8),
-                  fontSize: 16,
+                  color: Get.isDarkMode ? Colors.black87 : Colors.white70,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -117,6 +117,49 @@ class ProductItemCard extends StatelessWidget {
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 10,
+            right: 10,
+            width: 100,
+            height: 100,
+            child: BounceInDown(
+              delay: Duration(milliseconds: 500),
+              child: Transform.rotate(
+                angle: -math.pi / 11,
+                // angle: 0,
+                child: product.spacialNote.isNotEmpty
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 25,
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 9,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(18),
+                              // bottomRight: Radius.circular(20),
+                            ),
+                            color: Colors.red.withOpacity(.7),
+                          ),
+                          child: Text(
+                            product.spacialNote,
+                            style: TextStyle(
+                              color: Get.isDarkMode
+                                  ? MyColorTheme.light
+                                  : MyColorTheme.dark,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    : null,
               ),
             ),
           ),

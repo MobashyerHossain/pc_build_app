@@ -15,21 +15,38 @@ class SplashPage extends GetView<SplashController> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Spin(
-                    child: BounceInDown(
+                  ZoomOut(
+                    delay: Duration(
+                      milliseconds: 2800,
+                    ),
+                    child: FadeIn(
+                      delay: Duration(
+                        seconds: 1,
+                      ),
                       child: Image(
                         image: AssetImage('assets/logo/splash_2.gif'),
                       ),
                     ),
                   ),
                   SizedBox(height: 30),
-                  Roulette(
-                    child: ZoomIn(
-                      child: Text(
-                        'Welcome'.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
+                  ZoomOut(
+                    delay: Duration(
+                      milliseconds: 2800,
+                    ),
+                    child: Roulette(
+                      duration: Duration(
+                        milliseconds: 2500,
+                      ),
+                      child: ZoomIn(
+                        delay: Duration(
+                          milliseconds: 500,
+                        ),
+                        child: Text(
+                          'Welcome'.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
