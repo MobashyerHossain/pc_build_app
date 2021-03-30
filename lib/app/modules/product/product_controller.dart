@@ -5,14 +5,14 @@ import 'package:pc_build_app/app/data/models/category_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/models/product_page_model.dart';
 import 'package:pc_build_app/app/data/models/website_model.dart';
-import 'package:pc_build_app/app/data/repositories/scrapping_repository.dart';
+import 'package:pc_build_app/app/data/repositories/products_repository.dart';
 import 'package:pc_build_app/app/data/services/site_change_service.dart';
 import 'package:pc_build_app/app/global_controller/website_controller.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ProductController extends GetxController {
-  final ScrappingRepository _scrapper = Get.find<ScrappingRepository>();
+  final ProductsRepository _productsScrapper = Get.find<ProductsRepository>();
   final _productPage = ProductPageModel.sampleModel().obs;
   // site >> category >> page >> products
 
@@ -30,6 +30,7 @@ class ProductController extends GetxController {
   final _prevPageAvailable = false.obs;
 
   final _searchOn = false.obs;
+  final _searchKey = ''.obs;
 
   setPage(value) => this._page.value = value;
   getPage() => this._page.value;
@@ -65,10 +66,8 @@ class ProductController extends GetxController {
   getSearchOn() => this._searchOn.value;
   setSearchOn(value) => this._searchOn.value = value;
 
-  // ProductController() {
-  //   setSite(ScrapperConstants.WEBSITE_LIST[BottomBarService().index]);
-  //   print('lalala');
-  // }
+  getSearchKey() => this._searchKey.value;
+  setSearchKey(value) => this._searchKey.value = value;
 
   @override
   onReady() {
@@ -108,6 +107,7 @@ class ProductController extends GetxController {
     if (temSite != null) setSite(temSite);
     setNextPageAvailable(false);
     setPrevPageAvailable(false);
+    setSearchKey('');
 
     print(
       'Data Fetching for -->\n${this.getSite()} - ${this.getCategory()} - ${this.getPage()}',
@@ -116,7 +116,7 @@ class ProductController extends GetxController {
     try {
       setLoading(true);
 
-      _scrapper
+      _productsScrapper
           .getProducts(
         page: getPage(),
         category: getCategory(),
@@ -146,6 +146,10 @@ class ProductController extends GetxController {
       setHasError(true);
       setError(e.toString());
     } finally {}
+  }
+
+  searchProducts() {
+    print(getSearchKey());
   }
 
   pageChange(String dir) {

@@ -4,6 +4,8 @@ import 'package:pc_build_app/app/modules/home/home_binding.dart';
 import 'package:pc_build_app/app/modules/home/home_page.dart';
 import 'package:pc_build_app/app/modules/product/product_binding.dart';
 import 'package:pc_build_app/app/modules/product/product_page.dart';
+import 'package:pc_build_app/app/modules/search/search_binding.dart';
+import 'package:pc_build_app/app/modules/search/search_page.dart';
 import 'package:pc_build_app/app/modules/splash/spash_page.dart';
 import 'package:pc_build_app/app/modules/splash/splash_binding.dart';
 part './app_routes.dart';
@@ -33,6 +35,12 @@ abstract class AppPages {
       page: () => ErrorPage(
         error: Get.parameters['error'],
       ),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: Routes.SEARCH,
+      page: () => ProductSearchPage(),
+      binding: ProductSearchBinding(),
       transition: Transition.fadeIn,
     ),
   ];

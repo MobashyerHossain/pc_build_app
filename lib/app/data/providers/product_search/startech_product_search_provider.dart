@@ -1,24 +1,20 @@
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
-import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
-import 'package:pc_build_app/app/data/models/product_page_model.dart';
-import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
+import 'package:pc_build_app/app/data/providers/product_search/product_search_provider_mixin.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
 
-class StartechScrapper with Scrapper {
-  StartechScrapper() {
+class StartechProductSearchProvider with ProductSearchProvider {
+  StartechProductSearchProvider() {
     siteUrl = ScrapperConstants.STARTECH_BASE_URL;
-    categoryUrls = ScrapperConstants.STARTECH_CATEGORY_LIST;
-    localUrl = ScrapperConstants.STARTECH_PRODUCT_INDEX_URL;
+    searchUrl = ScrapperConstants.STARTECH_PRODUCT_SEARCH_URL;
   }
 
   @override
-  getProducts({
-    required category,
-    required page,
+  getSearchedProducts({
+    required searchKey,
   }) async {
     WebScraper webScraper = WebScraper(siteUrl);
 
@@ -28,20 +24,16 @@ class StartechScrapper with Scrapper {
     final priceList = [];
     final labelList = [];
     List<ProductInfoModel> productList = [];
-    List<BrandModel> brandList = [];
-    ProductPageModel productPage = ProductPageModel.sampleModel();
 
     var uuid = Uuid();
 
     try {
-      var url = localUrl
-          .replaceAll('[1]', '${categoryUrls[category]}')
-          .replaceAll('[2]', '$page');
+      var url = '$searchUrl$searchKey';
 
       if (await webScraper.loadWebPage(url)) {
         // Scrapping Title, Url
         webScraper.getElement(
-          'h4.product-name > a',
+          'div.product-content-info > a.product-title-grid',
           ['href'],
         ).forEach(
           (element) {
@@ -54,7 +46,7 @@ class StartechScrapper with Scrapper {
 
         // Scrapping Thumbnail
         webScraper.getElement(
-          'div.product-thumb > div.img-holder > a > img',
+          'div.product-thumb > a > img',
           ['src'],
         ).forEach(
           (element) {
@@ -64,26 +56,21 @@ class StartechScrapper with Scrapper {
         );
 
         // Scrapping Price
-        webScraper
-            .getElement(
-              'div.price > span',
-              [],
-            )
-            .asMap()
-            .forEach(
-              (index, element) {
-                if (index % 2 == 0) {
-                  final price = int.parse(
-                    element['title'].replaceAll(RegExp('[^0-9]'), ''),
-                  );
-                  priceList.add(price);
-                }
-              },
+        webScraper.getElement(
+          'div.price-label > div.special-price > span',
+          [],
+        ).forEach(
+          (element) {
+            final price = int.parse(
+              element['title'].replaceAll(RegExp('[^0-9]'), ''),
             );
+            priceList.add(price);
+          },
+        );
 
         // // Product Label
         webScraper.getElement(
-          'div.product-info > div.actions > div.cart-btn > span',
+          'div.product-box > div.product-thumb',
           [],
         ).forEach(
           (element) {
@@ -104,33 +91,29 @@ class StartechScrapper with Scrapper {
         );
 
         // Populating Brand Model
+        var brandNames = [];
         webScraper.getElement(
-          'div.product-listing > div.child-list > a',
-          ['href'],
+          'div.default-brand-filters > span > button',
+          [],
         ).forEach(
           (element) {
-            final brand = BrandModel(
-              name: element['title'],
-              url: element['attributes']['href'].toString().replaceAll(
-                    this.siteUrl,
-                    '',
-                  ),
+            brandNames.add(
+              element['title'].toString().split(' ')[0],
             );
-            brandList.add(brand);
           },
         );
 
         // checking previous page
         bool prevCheck = !webScraper.getElement(
-          'li > span.disabled',
-          [],
-        ).any((element) => element['title'] == 'PREV');
+          'div.pages > ol > li',
+          ['aria-label'],
+        ).any((element) => element['attributes']['aria-label'] == '« Previous');
 
         // checking next page
         bool nextCheck = !webScraper.getElement(
-          'li > span.disabled',
-          [],
-        ).any((element) => element['title'] == 'NEXT');
+          'div.pages > ol > li',
+          ['aria-label'],
+        ).any((element) => element['attributes']['aria-label'] == 'Next »');
 
         // Populating ProductInfo List
         for (var i = 0; i < titleList.length; i++) {
@@ -138,7 +121,7 @@ class StartechScrapper with Scrapper {
             ProductInfoModel(
               id: uuid.v5(
                 Uuid.NAMESPACE_URL,
-                '$siteUrl$localUrl/item$i',
+                '$siteUrl$searchUrl/item$i',
               ),
               title: titleList[i].trim(),
               url: urlList[i].toString().replaceFirst(siteUrl, ''),
@@ -148,16 +131,6 @@ class StartechScrapper with Scrapper {
             ),
           );
         }
-
-        productPage = ProductPageModel(
-          page: page,
-          nextPageAvailable: nextCheck,
-          previousPageAvailable: prevCheck,
-          category: category,
-          website: 'startech',
-          productList: productList,
-          brandList: brandList,
-        );
 
         // For Debugging
         // productList.forEach((element) {
@@ -171,7 +144,7 @@ class StartechScrapper with Scrapper {
       }
     } catch (e) {
       print(e);
-      Get.toNamed(
+      Get.offNamed(
         Routes.ERROR,
         parameters: {
           'error': e.toString(),
@@ -180,6 +153,6 @@ class StartechScrapper with Scrapper {
     }
 
     // Returning ProductInfo List
-    return productPage;
+    return productList;
   }
 }

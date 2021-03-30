@@ -7,7 +7,7 @@ import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/page_changer.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/product_item_card.dart';
-import 'package:pc_build_app/app/modules/product/local_widgets/search_box.dart';
+import 'package:pc_build_app/app/global_widgets/search_box.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/top_bar.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -57,6 +57,7 @@ class ProductPage extends GetView<ProductController> {
                     final products = _.getProducts();
                     return Stack(
                       children: [
+                        // Product List
                         Container(
                           padding: EdgeInsets.only(
                             left: 10,
@@ -70,11 +71,8 @@ class ProductPage extends GetView<ProductController> {
                             crossAxisCount: 2,
                             itemCount: products.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {},
-                                child: ProductItemCard(
-                                  product: products[index],
-                                ),
+                              return ProductItemCard(
+                                product: products[index],
                               );
                             },
                             staggeredTileBuilder: (int index) =>
@@ -84,6 +82,7 @@ class ProductPage extends GetView<ProductController> {
                             crossAxisSpacing: 0.0,
                           ),
                         ),
+                        //Loading Indicator
                         Positioned(
                           top: 200,
                           child: Container(
@@ -113,14 +112,9 @@ class ProductPage extends GetView<ProductController> {
             ),
             PageChanger(),
             TopBar(),
-            Obx(() => controller.getSearchOn()
-                ? FadeInDownBig(
-                    duration: Duration(
-                      milliseconds: 500,
-                    ),
-                    child: SearchBox(),
-                  )
-                : Container()),
+            Obx(
+              () => controller.getSearchOn() ? SearchBox() : Container(),
+            ),
           ],
         ),
       ),

@@ -37,6 +37,7 @@ class ScrapperConstants {
   static const WEBSITE_STARTECH = 'startech';
   static const STARTECH_BASE_URL = 'https://www.startech.com.bd';
   static const STARTECH_PRODUCT_INDEX_URL = '/[1]?limit=10&page=[2]';
+  static const STARTECH_PRODUCT_SEARCH_URL = '/product/search?search=';
   static const STARTECH_CATEGORY_LIST = {
     'casing': 'component/casing',
     'casing_cooler': 'component/casing-cooler',
@@ -60,6 +61,7 @@ class ScrapperConstants {
   static const WEBSITE_RYANS = 'ryans';
   static const RYANS_BASE_URL = 'https://www.ryanscomputers.com';
   static const RYANS_PRODUCT_INDEX_URL = '/category/[1]?limit=10&page=[2]';
+  static const RYANS_PRODUCT_SEARCH_URL = '/search?q=';
   static const RYANS_CATEGORY_LIST = {
     'casing': 'desktop-component-casing',
     'casing_cooler': 'desktop-component-casing-fan',
@@ -83,6 +85,8 @@ class ScrapperConstants {
   static const WEBSITE_TECHLAND = 'techland';
   static const TECHLAND_BASE_URL = 'https://www.techlandbd.com';
   static const TECHLAND_PRODUCT_INDEX_URL = '/[1]?limit=10&page=[2]';
+  static const TECHLAND_PRODUCT_SEARCH_URL =
+      '/index.php?route=product/search&search=';
   static const TECHLAND_CATEGORY_LIST = {
     'casing': 'pc-components/computer-casing',
     'casing_cooler': 'pc-components/casing-fan',

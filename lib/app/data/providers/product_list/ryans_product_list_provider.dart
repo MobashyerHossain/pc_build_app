@@ -3,13 +3,13 @@ import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
 import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/models/product_page_model.dart';
-import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
+import 'package:pc_build_app/app/data/providers/product_list/product_list_provider_mixin.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
 
-class RyansScrapper with Scrapper {
-  RyansScrapper() {
+class RyansProductListProvider with ProductListProvider {
+  RyansProductListProvider() {
     siteUrl = ScrapperConstants.RYANS_BASE_URL;
     categoryUrls = ScrapperConstants.RYANS_CATEGORY_LIST;
     localUrl = ScrapperConstants.RYANS_PRODUCT_INDEX_URL;

@@ -1,25 +1,25 @@
 import 'package:get/get.dart';
-import 'package:pc_build_app/app/data/providers/ryans_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/providers/startech_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/providers/techland_scrapper_provider.dart';
-import 'package:pc_build_app/app/data/repositories/scrapping_repository.dart';
+import 'package:pc_build_app/app/data/providers/product_list/ryans_product_list_provider.dart';
+import 'package:pc_build_app/app/data/providers/product_list/startech_product_list_provider.dart';
+import 'package:pc_build_app/app/data/providers/product_list/techland_product_list_provider.dart';
+import 'package:pc_build_app/app/data/repositories/products_repository.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:pc_build_app/app/modules/splash/splash_controller.dart';
 
 class ProductBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<StartechScrapper>(
-      () => StartechScrapper(),
+    Get.lazyPut<StartechProductListProvider>(
+      () => StartechProductListProvider(),
     );
-    Get.lazyPut<RyansScrapper>(
-      () => RyansScrapper(),
+    Get.lazyPut<RyansProductListProvider>(
+      () => RyansProductListProvider(),
     );
-    Get.lazyPut<TechlandScrapper>(
-      () => TechlandScrapper(),
+    Get.lazyPut<TechlandProductListProvider>(
+      () => TechlandProductListProvider(),
     );
-    Get.lazyPut<ScrappingRepository>(
-      () => ScrappingRepository(),
+    Get.lazyPut<ProductsRepository>(
+      () => ProductsRepository(),
     );
     Get.lazyPut<ProductController>(
       () => ProductController(),

@@ -3,20 +3,23 @@ import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
 import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/models/product_page_model.dart';
-import 'package:pc_build_app/app/data/providers/scrapping_provider_mixin.dart';
+import 'package:pc_build_app/app/data/providers/product_list/product_list_provider_mixin.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
 import 'package:uuid/uuid.dart';
 import 'package:web_scraper/web_scraper.dart';
 
-class TechlandScrapper with Scrapper {
-  TechlandScrapper() {
-    siteUrl = ScrapperConstants.TECHLAND_BASE_URL;
-    categoryUrls = ScrapperConstants.TECHLAND_CATEGORY_LIST;
-    localUrl = ScrapperConstants.TECHLAND_PRODUCT_INDEX_URL;
+class StartechProductListProvider with ProductListProvider {
+  StartechProductListProvider() {
+    siteUrl = ScrapperConstants.STARTECH_BASE_URL;
+    categoryUrls = ScrapperConstants.STARTECH_CATEGORY_LIST;
+    localUrl = ScrapperConstants.STARTECH_PRODUCT_INDEX_URL;
   }
 
   @override
-  getProducts({required category, required page}) async {
+  getProducts({
+    required category,
+    required page,
+  }) async {
     WebScraper webScraper = WebScraper(siteUrl);
 
     final titleList = [];
@@ -38,38 +41,49 @@ class TechlandScrapper with Scrapper {
       if (await webScraper.loadWebPage(url)) {
         // Scrapping Title, Url
         webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.caption > div.name > a',
+          'h4.product-name > a',
           ['href'],
-        ).forEach((element) {
-          final title = element['title'];
-          final url = element['attributes']['href'];
-          titleList.add(title);
-          urlList.add(url);
-        });
+        ).forEach(
+          (element) {
+            final title = element['title'];
+            final url = element['attributes']['href'];
+            titleList.add(title);
+            urlList.add(url);
+          },
+        );
 
         // Scrapping Thumbnail
         webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.image > a > div > img',
+          'div.product-thumb > div.img-holder > a > img',
           ['src'],
-        ).forEach((element) {
-          final thumbnail = element['attributes']['src'];
-          thumbnailList.add(thumbnail);
-        });
+        ).forEach(
+          (element) {
+            final thumbnail = element['attributes']['src'];
+            thumbnailList.add(thumbnail);
+          },
+        );
 
         // Scrapping Price
-        webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.caption > div.price > span.price-tax',
-          [],
-        ).forEach((element) {
-          final price = int.parse(
-            element['title'].replaceAll(RegExp('[^0-9]'), ''),
-          );
-          priceList.add(price);
-        });
+        webScraper
+            .getElement(
+              'div.price > span',
+              [],
+            )
+            .asMap()
+            .forEach(
+              (index, element) {
+                if (index % 2 == 0) {
+                  final price = int.parse(
+                    element['title'].replaceAll(RegExp('[^0-9]'), ''),
+                  );
+                  priceList.add(price);
+                }
+              },
+            );
 
         // // Product Label
         webScraper.getElement(
-          'div.product-layout > div.product-thumb > div.image',
+          'div.product-info > div.actions > div.cart-btn > span',
           [],
         ).forEach(
           (element) {
@@ -81,8 +95,6 @@ class TechlandScrapper with Scrapper {
               label = 'Upcoming';
             } else if (temp.contains('call for price')) {
               label = 'Call for Price';
-            } else if (temp.contains('%')) {
-              label = 'Offer -${temp.replaceAll(RegExp('[^0-9]'), '')} %';
             } else {
               label = '';
             }
@@ -92,43 +104,33 @@ class TechlandScrapper with Scrapper {
         );
 
         // Populating Brand Model
-        var brandName = webScraper.getElement(
-          'div.refine-items > div.refine-item > a > span.refine-name > span.links-text',
-          [],
+        webScraper.getElement(
+          'div.product-listing > div.child-list > a',
+          ['href'],
+        ).forEach(
+          (element) {
+            final brand = BrandModel(
+              name: element['title'],
+              url: element['attributes']['href'].toString().replaceAll(
+                    this.siteUrl,
+                    '',
+                  ),
+            );
+            brandList.add(brand);
+          },
         );
 
-        webScraper
-            .getElement(
-              'div.refine-items > div.refine-item > a',
-              ['href'],
-            )
-            .asMap()
-            .forEach(
-              (index, element) {
-                final brand = BrandModel(
-                  name: brandName[index].toString(),
-                  url: element['attributes']['href'].toString().replaceAll(
-                        this.siteUrl,
-                        '',
-                      ),
-                );
-                brandList.add(brand);
-              },
-            );
-
         // checking previous page
-        bool prevCheck = webScraper.getElement(
-              'li > a.prev',
-              [],
-            ).length >
-            0;
+        bool prevCheck = !webScraper.getElement(
+          'li > span.disabled',
+          [],
+        ).any((element) => element['title'] == 'PREV');
 
         // checking next page
-        bool nextCheck = webScraper.getElement(
-              'li > a.next',
-              [],
-            ).length >
-            0;
+        bool nextCheck = !webScraper.getElement(
+          'li > span.disabled',
+          [],
+        ).any((element) => element['title'] == 'NEXT');
 
         // Populating ProductInfo List
         for (var i = 0; i < titleList.length; i++) {
@@ -152,7 +154,7 @@ class TechlandScrapper with Scrapper {
           nextPageAvailable: nextCheck,
           previousPageAvailable: prevCheck,
           category: category,
-          website: 'techland',
+          website: 'startech',
           productList: productList,
           brandList: brandList,
         );

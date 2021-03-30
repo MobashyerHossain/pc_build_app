@@ -1,6 +1,6 @@
 import 'package:pc_build_app/app/data/models/product_page_model.dart';
 
-mixin Scrapper {
+mixin ProductListProvider {
   String siteUrl = '';
   Map<String, String> categoryUrls = {};
   String localUrl = '';
