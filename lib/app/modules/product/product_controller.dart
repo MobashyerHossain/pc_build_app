@@ -29,6 +29,8 @@ class ProductController extends GetxController {
   final _nextPageAvailable = false.obs;
   final _prevPageAvailable = false.obs;
 
+  final _searchOn = false.obs;
+
   setPage(value) => this._page.value = value;
   getPage() => this._page.value;
 
@@ -60,6 +62,9 @@ class ProductController extends GetxController {
   getPrevPageAvailable() => this._prevPageAvailable.value;
   setPrevPageAvailable(value) => this._prevPageAvailable.value = value;
 
+  getSearchOn() => this._searchOn.value;
+  setSearchOn(value) => this._searchOn.value = value;
+
   // ProductController() {
   //   setSite(ScrapperConstants.WEBSITE_LIST[BottomBarService().index]);
   //   print('lalala');
@@ -80,6 +85,17 @@ class ProductController extends GetxController {
   onClose() {
     super.onClose();
     print('closed');
+  }
+
+  goToProducts(
+    int? temPage,
+    String? temCategory,
+    String? temSite,
+  ) {
+    this._products.clear();
+    setSearchOn(false);
+
+    fetchProducts(temPage, temCategory, temSite);
   }
 
   fetchProducts(
@@ -155,6 +171,14 @@ class ProductController extends GetxController {
     } else {
       pageChange('left');
     }
+  }
+
+  WebsiteModel getWebsite() {
+    return getWebsites()
+        .where(
+          (element) => element.code == getSite(),
+        )
+        .first;
   }
 
   List<WebsiteModel> getWebsites() {

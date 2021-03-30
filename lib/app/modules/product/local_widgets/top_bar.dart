@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/data/models/category_model.dart';
 import 'package:pc_build_app/app/global_widgets/section_title.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
@@ -15,17 +16,27 @@ class TopBar extends StatelessWidget {
         builder: (_) {
           final catlist = _.getCatrgories();
           var dropdownValue = _.getCategory().toString().obs;
-          return Padding(
+          return Container(
             padding: EdgeInsets.symmetric(
               horizontal: 10,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                SectionTitle(
+                  thumb: Image(
+                    // height: 50,
+                    image: ResizeImage(
+                      AssetImage(_.getWebsite().logo),
+                      height: 20,
+                    ),
+                  ),
+                ),
                 DropdownButton<String>(
-                  menuMaxHeight: Get.height,
                   value: dropdownValue.value,
-                  dropdownColor: Colors.grey.withOpacity(0.2),
+                  dropdownColor: Get.isDarkMode
+                      ? MyColorTheme.light.withOpacity(0.6)
+                      : MyColorTheme.dark.withOpacity(0.6),
                   icon: const Icon(
                     Icons.arrow_downward,
                     color: Colors.transparent,
@@ -51,6 +62,13 @@ class TopBar extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             padding: EdgeInsets.all(8),
                             textSize: 15,
+                            thumb: Image(
+                              // height: 50,
+                              image: ResizeImage(
+                                AssetImage(value.thumb),
+                                height: 20,
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -60,22 +78,46 @@ class TopBar extends StatelessWidget {
                     (CategoryModel value) {
                       return DropdownMenuItem<String>(
                         value: value.code,
-                        child: SectionTitle(
-                          title: value.name.replaceAll('_', ' ').toUpperCase(),
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.all(8),
-                          textSize: 15,
+                        child: Container(
+                          width: Get.width / 2.5,
+                          child: Row(
+                            children: [
+                              Image(
+                                height: 30,
+                                image: AssetImage(value.thumb),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                value.name,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Get.isDarkMode
+                                      ? MyColorTheme.dark
+                                      : MyColorTheme.light,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
                   ).toList(),
                 ),
                 SectionTitle(
-                  title: "Page ${_.getPage()}",
+                  title: "P - ${_.getPage()}",
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.all(8),
                   textSize: 15,
                 ),
+                // SectionTitle(
+                //   title: "P - ${_.getPage()}",
+                //   alignment: Alignment.centerLeft,
+                //   padding: EdgeInsets.all(8),
+                //   textSize: 15,
+                // ),
               ],
             ),
           );

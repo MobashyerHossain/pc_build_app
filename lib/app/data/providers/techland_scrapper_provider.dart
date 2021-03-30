@@ -138,11 +138,11 @@ class TechlandScrapper with Scrapper {
                 Uuid.NAMESPACE_URL,
                 '$siteUrl$localUrl/item$i',
               ),
-              title: titleList[i],
+              title: titleList[i].trim(),
               url: urlList[i].toString().replaceFirst(siteUrl, ''),
               thumb: thumbnailList[i],
               price: priceList[i],
-              spacialNote: labelList[i],
+              spacialNote: labelList[i].trim(),
             ),
           );
         }

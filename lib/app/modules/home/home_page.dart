@@ -146,7 +146,7 @@ class HomePage extends GetView<HomeController> {
                                 Get.toNamed(
                                   Routes.PRODUCT,
                                 );
-                                Get.find<ProductController>().fetchProducts(
+                                Get.find<ProductController>().goToProducts(
                                   1,
                                   categories[index].code,
                                   null,

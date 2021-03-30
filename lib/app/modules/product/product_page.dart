@@ -3,12 +3,11 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:pc_build_app/app/data/models/category_model.dart';
+import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
-import 'package:pc_build_app/app/global_widgets/section_title.dart';
-import 'package:pc_build_app/app/modules/product/local_widgets/page_change_indicator.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/page_changer.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/product_item_card.dart';
+import 'package:pc_build_app/app/modules/product/local_widgets/search_box.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/top_bar.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
@@ -23,7 +22,15 @@ class ProductPage extends GetView<ProductController> {
         floatingActionButton: FloatingButton(
           fabKey: fabKey,
         ),
+        drawer: Drawer(
+          child: Container(
+            child: Center(
+              child: Text('gsdsd'),
+            ),
+          ),
+        ),
         body: Stack(
+          alignment: Alignment.topCenter,
           children: [
             SimpleGestureDetector(
               onHorizontalSwipe: controller.onVerticalSwipe,
@@ -44,38 +51,29 @@ class ProductPage extends GetView<ProductController> {
                     tileMode: TileMode.clamp,
                   ),
                 ),
-                child: Container(
-                  child: GetX<ProductController>(
-                    init: ProductController(),
-                    builder: (_) {
-                      final products = _.getProducts();
-                      if (!_.getLoading()) {
-                        return Container(
+                child: GetX<ProductController>(
+                  init: ProductController(),
+                  builder: (_) {
+                    final products = _.getProducts();
+                    return Stack(
+                      children: [
+                        Container(
                           padding: EdgeInsets.only(
                             left: 10,
                             right: 10,
                           ),
                           child: StaggeredGridView.countBuilder(
                             padding: EdgeInsets.only(
-                              bottom: 70,
-                              top: 40,
+                              bottom: 60,
+                              top: 60,
                             ),
                             crossAxisCount: 2,
                             itemCount: products.length,
                             itemBuilder: (BuildContext context, int index) {
                               return GestureDetector(
                                 onTap: () {},
-                                child: Center(
-                                  child: FittedBox(
-                                    fit: BoxFit.fitWidth,
-                                    child: SizedBox(
-                                      width: Get.width / 2.2,
-                                      height: 160,
-                                      child: ProductItemCard(
-                                        product: products[index],
-                                      ),
-                                    ),
-                                  ),
+                                child: ProductItemCard(
+                                  product: products[index],
                                 ),
                               );
                             },
@@ -85,37 +83,44 @@ class ProductPage extends GetView<ProductController> {
                             mainAxisSpacing: 30.0,
                             crossAxisSpacing: 0.0,
                           ),
-                        );
-                      } else {
-                        return Center(
-                          child: ZoomIn(
-                            delay: Duration(
-                              milliseconds: 50,
-                            ),
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.contain,
-                                  image: ResizeImage(
-                                    AssetImage('assets/logo/splash_2.gif'),
-                                    width: 50,
-                                    height: 50,
-                                  ),
-                                ),
-                              ),
-                            ),
+                        ),
+                        Positioned(
+                          top: 200,
+                          child: Container(
+                            width: Get.width,
+                            alignment: Alignment.topCenter,
+                            child: _.getLoading()
+                                ? BounceInDown(
+                                    duration: Duration(
+                                      milliseconds: 200,
+                                    ),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: Get.isDarkMode
+                                            ? MyColorTheme.light
+                                            : MyColorTheme.dark,
+                                      ),
+                                    ),
+                                  )
+                                : null,
                           ),
-                        );
-                      }
-                    },
-                  ),
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
             PageChanger(),
             TopBar(),
+            Obx(() => controller.getSearchOn()
+                ? FadeInDownBig(
+                    duration: Duration(
+                      milliseconds: 500,
+                    ),
+                    child: SearchBox(),
+                  )
+                : Container()),
           ],
         ),
       ),

@@ -7,12 +7,14 @@ class SectionTitle extends StatelessWidget {
   final alignment;
   final padding;
   final textSize;
-  const SectionTitle({
+  final thumb;
+  SectionTitle({
     Key? key,
     this.title,
     this.alignment,
     this.padding,
     this.textSize,
+    this.thumb,
   }) : super(key: key);
 
   @override
@@ -23,9 +25,23 @@ class SectionTitle extends StatelessWidget {
       alignment: alignment,
       child: Container(
         decoration: BoxDecoration(
-          color: Get.isDarkMode
-              ? MyColorTheme.light.withOpacity(.5)
-              : MyColorTheme.dark.withOpacity(.5),
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: Get.isDarkMode
+                ? <Color>[
+                    Colors.white12,
+                    Colors.white54,
+                  ]
+                : <Color>[
+                    Colors.black26,
+                    Colors.black54,
+                  ],
+            tileMode: TileMode.repeated,
+          ),
+          // color: Get.isDarkMode
+          //     ? MyColorTheme.light.withOpacity(.4)
+          //     : MyColorTheme.dark.withOpacity(.5),
           borderRadius: BorderRadius.all(
             Radius.circular(30),
           ),
@@ -34,13 +50,26 @@ class SectionTitle extends StatelessWidget {
           horizontal: 20,
           vertical: 5,
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: textSize * 1.0,
-            color: Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
-            fontWeight: FontWeight.w700,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (thumb != null) thumb,
+            if (title != null && thumb != null)
+              SizedBox(
+                width: 10,
+              ),
+            if (title != null)
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: textSize * 1.0,
+                  color:
+                      Get.isDarkMode ? MyColorTheme.dark : MyColorTheme.light,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+          ],
         ),
       ),
     );

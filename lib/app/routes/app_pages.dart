@@ -26,14 +26,14 @@ abstract class AppPages {
       name: Routes.PRODUCT,
       page: () => ProductPage(),
       binding: ProductBinding(),
-      transition: Transition.zoom,
+      transition: Transition.fadeIn,
     ),
     GetPage(
       name: Routes.ERROR,
       page: () => ErrorPage(
         error: Get.parameters['error'],
       ),
-      transition: Transition.zoom,
+      transition: Transition.fadeIn,
     ),
   ];
 }
