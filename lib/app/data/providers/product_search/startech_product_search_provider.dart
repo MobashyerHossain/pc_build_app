@@ -13,7 +13,7 @@ class StartechProductSearchProvider with ProductSearchProvider {
   }
 
   @override
-  getSearchedProducts({
+  getSearchResult({
     required searchKey,
   }) async {
     WebScraper webScraper = WebScraper(siteUrl);

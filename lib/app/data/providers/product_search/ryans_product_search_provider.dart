@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/utils/constants/scrapper_constants.dart';
-import 'package:pc_build_app/app/data/models/brand_model.dart';
 import 'package:pc_build_app/app/data/models/product_info_model.dart';
 import 'package:pc_build_app/app/data/providers/product_search/product_search_provider_mixin.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
@@ -14,7 +13,7 @@ class RyansProductSearchProvider with ProductSearchProvider {
   }
 
   @override
-  getSearchedProducts({
+  getSearchResult({
     required searchKey,
   }) async {
     WebScraper webScraper = WebScraper(siteUrl);

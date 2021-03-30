@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/data/services/theme_service.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
+import 'package:pc_build_app/app/modules/search/search_controller.dart';
 
 class FloatingButton extends StatelessWidget {
   final fabKey;
@@ -63,7 +64,7 @@ class FloatingButton extends StatelessWidget {
             if (fabKey.currentState!.isOpen) {
               fabKey.currentState!.close();
             }
-            final c = Get.find<ProductController>();
+            final c = Get.find<ProductSearchController>();
             c.setSearchOn(!c.getSearchOn());
           },
         ),

@@ -10,6 +10,7 @@ import 'package:pc_build_app/app/modules/product/local_widgets/product_item_card
 import 'package:pc_build_app/app/global_widgets/search_box.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/top_bar.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
+import 'package:pc_build_app/app/modules/search/search_controller.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 class ProductPage extends GetView<ProductController> {
@@ -113,7 +114,10 @@ class ProductPage extends GetView<ProductController> {
             PageChanger(),
             TopBar(),
             Obx(
-              () => controller.getSearchOn() ? SearchBox() : Container(),
+              () {
+                final c = Get.find<ProductSearchController>();
+                return c.getSearchOn() ? SearchBox() : Container();
+              },
             ),
           ],
         ),

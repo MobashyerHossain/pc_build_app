@@ -11,6 +11,7 @@ import 'package:pc_build_app/app/global_widgets/section_title.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
 import 'package:pc_build_app/app/modules/home/local_widgets/item_card.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
+import 'package:pc_build_app/app/modules/search/search_controller.dart';
 import 'package:pc_build_app/app/routes/app_pages.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -186,10 +187,10 @@ class HomePage extends GetView<HomeController> {
                 ],
               ),
             ),
-            GetX<ProductController>(
-              init: ProductController(),
-              builder: (_) {
-                return _.getSearchOn() ? SearchBox() : Container();
+            Obx(
+              () {
+                final c = Get.find<ProductSearchController>();
+                return c.getSearchOn() ? SearchBox() : Container();
               },
             ),
           ],

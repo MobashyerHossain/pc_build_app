@@ -6,11 +6,15 @@ class ProductSearchPage extends GetView<ProductSearchController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('ProductSearchPage'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('ProductSearchPage'),
+      // ),
       body: SafeArea(
-        child: Text('ProductSearchController'),
+        child: Center(
+          child: Text(
+            controller.getSearchKey(),
+          ),
+        ),
       ),
     );
   }

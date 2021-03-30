@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/modules/product/product_controller.dart';
+import 'package:pc_build_app/app/modules/search/search_controller.dart';
 
 class SearchBox extends StatefulWidget {
   const SearchBox({
@@ -35,13 +36,14 @@ class _SearchBoxState extends State<SearchBox> {
         delay: Duration(
           milliseconds: 300,
         ),
-        child: GetX<ProductController>(
-          init: ProductController(),
+        child: GetX<ProductSearchController>(
+          init: ProductSearchController(),
           builder: (_) {
             return Center(
               child: TextField(
                 controller: _searchController,
                 onSubmitted: (String value) {
+                  _.setSearchOn(false);
                   _.searchProducts();
                 },
                 onChanged: (String value) {

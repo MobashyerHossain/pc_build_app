@@ -2,7 +2,7 @@ mixin ProductSearchProvider {
   String siteUrl = '';
   String searchUrl = '';
 
-  getSearchedProducts({
+  getSearchResult({
     required searchKey,
   }) async {
     return Future.value();
