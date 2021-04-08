@@ -13,7 +13,7 @@ class RyansProductSearchProvider with ProductSearchProvider {
   }
 
   @override
-  getSearchResult({
+  Future<List<ProductInfoModel>> getSearchResult({
     required searchKey,
   }) async {
     WebScraper webScraper = WebScraper(siteUrl);
@@ -23,121 +23,119 @@ class RyansProductSearchProvider with ProductSearchProvider {
     final thumbnailList = [];
     final priceList = [];
     final labelList = [];
-    List<ProductInfoModel> productList = [];
+    List<ProductInfoModel> productList = List<ProductInfoModel>.empty();
 
     var uuid = Uuid();
 
     try {
-      var url = '$searchUrl$searchKey';
+      print('2 secons later');
+      final skey = searchKey.toString().replaceAll(" ", "%20");
+      var url = '$searchUrl$skey';
 
       if (await webScraper.loadWebPage(url)) {
+        print(webScraper.getAllScripts());
         // Scrapping Title, Url
         webScraper.getElement(
-          'div.product-content-info > a.product-title-grid',
+          'div.product-content-info > a',
           ['href'],
         ).forEach(
           (element) {
-            final title = element['title'];
-            final url = element['attributes']['href'];
-            titleList.add(title);
-            urlList.add(url);
+            print(element['title']);
+            // final title = element['title'];
+            // final url = element['attributes']['href'];
+            // titleList.add(title);
+            // urlList.add(url);
           },
         );
 
-        // Scrapping Thumbnail
-        webScraper.getElement(
-          'div.product-thumb > a > img',
-          ['src'],
-        ).forEach(
-          (element) {
-            final thumbnail = element['attributes']['src'];
-            thumbnailList.add(thumbnail);
-          },
-        );
-
-        // Scrapping Price
-        webScraper.getElement(
-          'div.price-label > div.special-price > span',
-          [],
-        ).forEach(
-          (element) {
-            final price = int.parse(
-              element['title'].replaceAll(RegExp('[^0-9]'), ''),
-            );
-            priceList.add(price);
-          },
-        );
-
-        // // Product Label
-        webScraper.getElement(
-          'div.product-box > div.product-thumb',
-          [],
-        ).forEach(
-          (element) {
-            final temp = element.toString().toLowerCase();
-            var label = '';
-            if (temp.contains('out of stock')) {
-              label = 'Out of Stock';
-            } else if (temp.contains('up coming')) {
-              label = 'Upcoming';
-            } else if (temp.contains('call for price')) {
-              label = 'Call for Price';
-            } else {
-              label = '';
-            }
-
-            labelList.add(label);
-          },
-        );
-
-        // Populating Brand Model
-        var brandNames = [];
-        webScraper.getElement(
-          'div.default-brand-filters > span > button',
-          [],
-        ).forEach(
-          (element) {
-            brandNames.add(
-              element['title'].toString().split(' ')[0],
-            );
-          },
-        );
-
-        // checking previous page
-        bool prevCheck = !webScraper.getElement(
-          'div.pages > ol > li',
-          ['aria-label'],
-        ).any((element) => element['attributes']['aria-label'] == '« Previous');
-
-        // checking next page
-        bool nextCheck = !webScraper.getElement(
-          'div.pages > ol > li',
-          ['aria-label'],
-        ).any((element) => element['attributes']['aria-label'] == 'Next »');
-
-        // Populating ProductInfo List
-        for (var i = 0; i < titleList.length; i++) {
-          productList.add(
-            ProductInfoModel(
-              id: uuid.v5(
-                Uuid.NAMESPACE_URL,
-                '$siteUrl$searchUrl/item$i',
-              ),
-              title: titleList[i].trim(),
-              url: urlList[i].toString().replaceFirst(siteUrl, ''),
-              thumb: thumbnailList[i],
-              price: priceList[i],
-              spacialNote: labelList[i].trim(),
-            ),
-          );
-        }
-
-        // For Debugging
-        // productList.forEach((element) {
+        print('i am here');
+        // titleList.forEach((element) {
         //   print(element);
         // });
-        // print(productPage);
-        print('Scrapping Succesful');
+
+        // // Scrapping Thumbnail
+        // webScraper.getElement(
+        //   'div.product-thumb > a > img',
+        //   ['src'],
+        // ).forEach(
+        //   (element) {
+        //     final thumbnail = element['attributes']['src'];
+        //     thumbnailList.add(thumbnail);
+        //   },
+        // );
+
+        // // Scrapping Price
+        // webScraper.getElement(
+        //   'div.price-label > div.special-price > span',
+        //   [],
+        // ).forEach(
+        //   (element) {
+        //     final price = int.parse(
+        //       element['title'].replaceAll(RegExp('[^0-9]'), ''),
+        //     );
+        //     priceList.add(price);
+        //   },
+        // );
+
+        // // // Product Label
+        // webScraper.getElement(
+        //   'div.product-box > div.product-thumb',
+        //   [],
+        // ).forEach(
+        //   (element) {
+        //     final temp = element.toString().toLowerCase();
+        //     var label = '';
+        //     if (temp.contains('out of stock')) {
+        //       label = 'Out of Stock';
+        //     } else if (temp.contains('up coming')) {
+        //       label = 'Upcoming';
+        //     } else if (temp.contains('call for price')) {
+        //       label = 'Call for Price';
+        //     } else {
+        //       label = '';
+        //     }
+
+        //     labelList.add(label);
+        //   },
+        // );
+
+        // // Populating Brand Model
+        // var brandNames = [];
+        // webScraper.getElement(
+        //   'div.default-brand-filters > span > button',
+        //   [],
+        // ).forEach(
+        //   (element) {
+        //     brandNames.add(
+        //       element['title'].toString().split(' ')[0],
+        //     );
+        //   },
+        // );
+
+        // // Populating ProductInfo List
+        // for (var i = 0; i < titleList.length; i++) {
+        //   productList.add(
+        //     ProductInfoModel(
+        //       id: uuid.v5(
+        //         Uuid.NAMESPACE_URL,
+        //         '$siteUrl$searchUrl/item$i',
+        //       ),
+        //       title: titleList[i].trim(),
+        //       url: urlList[i].toString().replaceFirst(siteUrl, ''),
+        //       thumb: thumbnailList[i],
+        //       price: priceList[i],
+        //       spacialNote: labelList[i].trim(),
+        //     ),
+        //   );
+        // }
+
+        // // For Debugging
+        // // productList.forEach((element) {
+        // //   print(element);
+        // // });
+        // // print(productPage);
+        // print('Scrapping Succesful');
+
       } else {
         print('Scrapping Unsuccesful');
         throw Exception('Api Connection Failed');
@@ -153,6 +151,6 @@ class RyansProductSearchProvider with ProductSearchProvider {
     }
 
     // Returning ProductInfo List
-    return productList;
+    return Future.value(productList);
   }
 }

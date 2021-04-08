@@ -13,9 +13,10 @@ class StartechProductSearchProvider with ProductSearchProvider {
   }
 
   @override
-  getSearchResult({
+  Future<List<ProductInfoModel>> getSearchResult({
     required searchKey,
   }) async {
+    print('I am here');
     WebScraper webScraper = WebScraper(siteUrl);
 
     final titleList = [];
@@ -28,12 +29,16 @@ class StartechProductSearchProvider with ProductSearchProvider {
     var uuid = Uuid();
 
     try {
-      var url = '$searchUrl$searchKey';
+      final skey = searchKey.toString().replaceAll(" ", "%20");
+      var url = '$searchUrl$skey';
 
       if (await webScraper.loadWebPage(url)) {
+        print(url);
+        print(webScraper.getPageContent());
+        print('I am here');
         // Scrapping Title, Url
         webScraper.getElement(
-          'div.product-content-info > a.product-title-grid',
+          'div.product-content-blcok > div.product-name > a',
           ['href'],
         ).forEach(
           (element) {
@@ -43,6 +48,8 @@ class StartechProductSearchProvider with ProductSearchProvider {
             urlList.add(url);
           },
         );
+
+        print(titleList);
 
         // Scrapping Thumbnail
         webScraper.getElement(

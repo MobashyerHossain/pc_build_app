@@ -13,7 +13,7 @@ class TechlandProductSearchProvider with ProductSearchProvider {
   }
 
   @override
-  getSearchResult({
+  Future<List<ProductInfoModel>> getSearchResult({
     required searchKey,
   }) async {
     WebScraper webScraper = WebScraper(siteUrl);

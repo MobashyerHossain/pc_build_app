@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/data/services/site_change_service.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
+import 'package:pc_build_app/app/global_widgets/gradient_container.dart';
+import 'package:pc_build_app/app/global_widgets/menu_side_bar.dart';
 import 'package:pc_build_app/app/global_widgets/search_box.dart';
 import 'package:pc_build_app/app/global_widgets/section_title.dart';
 import 'package:pc_build_app/app/modules/home/home_controller.dart';
@@ -23,35 +25,11 @@ class HomePage extends GetView<HomeController> {
         floatingActionButton: FloatingButton(
           fabKey: fabKey,
         ),
-        body: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: Get.isDarkMode
-                      ? <Color>[
-                          Colors.grey.shade900,
-                          Colors.grey.shade600,
-                        ]
-                      : <Color>[
-                          Colors.grey.shade100,
-                          Colors.grey.shade500,
-                        ],
-                  tileMode: TileMode.clamp,
-                ),
-              ),
-              // child: CustomScrollView(
-              //   slivers: [
-              //     SliverLayoutBuilder(
-              //       builder: (context, constraints) => {
-              //         return Container(Text('fgdfg')),
-              //       },
-              //     ),
-              //   ],
-              // ),
-              child: Column(
+        drawer: MenuSideBar(),
+        body: GradientContainer(
+          child: Stack(
+            children: [
+              Column(
                 children: [
                   SizedBox(
                     height: 5,
@@ -138,13 +116,13 @@ class HomePage extends GetView<HomeController> {
                         builder: (_) {
                           final categories = _.getCategories();
                           return Container(
-                            padding: EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                            ),
                             child: StaggeredGridView.countBuilder(
                               crossAxisCount: 2,
                               itemCount: categories.length,
+                              physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics(),
+                              ),
+                              scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
                                   onTap: () {
@@ -186,14 +164,14 @@ class HomePage extends GetView<HomeController> {
                   ),
                 ],
               ),
-            ),
-            Obx(
-              () {
-                final c = Get.find<ProductSearchController>();
-                return c.getSearchOn() ? SearchBox() : Container();
-              },
-            ),
-          ],
+              Obx(
+                () {
+                  final c = Get.find<ProductSearchController>();
+                  return c.getSearchOn() ? SearchBox() : Container();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

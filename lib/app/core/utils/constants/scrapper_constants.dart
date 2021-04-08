@@ -37,7 +37,7 @@ class ScrapperConstants {
   static const WEBSITE_STARTECH = 'startech';
   static const STARTECH_BASE_URL = 'https://www.startech.com.bd';
   static const STARTECH_PRODUCT_INDEX_URL = '/[1]?limit=10&page=[2]';
-  static const STARTECH_PRODUCT_SEARCH_URL = '/product/search?search=';
+  static const STARTECH_PRODUCT_SEARCH_URL = '/product/search?limit=50&search=';
   static const STARTECH_CATEGORY_LIST = {
     'casing': 'component/casing',
     'casing_cooler': 'component/casing-cooler',

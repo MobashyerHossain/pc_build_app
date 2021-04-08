@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/data/services/theme_service.dart';
-import 'package:pc_build_app/app/modules/product/product_controller.dart';
 import 'package:pc_build_app/app/modules/search/search_controller.dart';
 
 class FloatingButton extends StatelessWidget {
@@ -41,6 +40,7 @@ class FloatingButton extends StatelessWidget {
         size: 30,
       ),
       children: <Widget>[
+        // Theme Change
         IconButton(
           icon: Icon(
             Get.isDarkMode ? Icons.wb_sunny : Icons.nights_stay,
@@ -54,6 +54,7 @@ class FloatingButton extends StatelessWidget {
             }
           },
         ),
+        // Search
         IconButton(
           icon: Icon(
             Icons.search,
@@ -64,10 +65,12 @@ class FloatingButton extends StatelessWidget {
             if (fabKey.currentState!.isOpen) {
               fabKey.currentState!.close();
             }
+
             final c = Get.find<ProductSearchController>();
             c.setSearchOn(!c.getSearchOn());
           },
         ),
+        // Drawer
         IconButton(
           icon: Icon(
             Icons.menu_book,

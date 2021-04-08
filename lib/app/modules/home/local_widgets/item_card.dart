@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/data/models/category_model.dart';
+import 'package:pc_build_app/app/global_widgets/gradient_card.dart';
 
 class ItemCard extends StatelessWidget {
   final CategoryModel category;
@@ -20,29 +21,9 @@ class ItemCard extends StatelessWidget {
             left: 0,
             bottom: 0,
             child: Dance(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    colors: Get.isDarkMode
-                        ? <Color>[
-                            Colors.white70,
-                            Colors.white24,
-                          ]
-                        : <Color>[
-                            Colors.black54,
-                            Colors.black26,
-                          ],
-                    tileMode: TileMode.repeated,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
-                ),
+              child: GradientCard(
+                height: 80.0,
                 width: Get.width / 3,
-                height: 80,
               ),
             ),
           ),

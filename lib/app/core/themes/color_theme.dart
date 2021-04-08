@@ -24,8 +24,9 @@ class MyColorTheme {
 
   static const lightTileBackground = MyColorTheme.light;
   static const darkTileBackground = MyColorTheme.dark;
-  static const light = Colors.white60;
-  static const dark = Colors.black87;
+
+  static const light = Colors.orange;
+  static const dark = Colors.purple;
 
   static const lightColorScheme = ColorScheme(
     primary: MyColorTheme.dark,
@@ -58,4 +59,6 @@ class MyColorTheme {
     onError: Colors.red,
     brightness: Brightness.dark,
   );
+
+  // static const backgroundLig =
 }

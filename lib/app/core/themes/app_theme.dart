@@ -8,6 +8,7 @@ class MyAppTheme {
   static final dark = ThemeData.dark().copyWith(
     colorScheme: MyColorTheme.darkColorScheme,
   );
+
   // final lightTheme = ThemeData.light().copyWith(
   //   textTheme: MyTextTheme().darkText,
   //   primaryColor: MyColorTheme().lightPrimary,

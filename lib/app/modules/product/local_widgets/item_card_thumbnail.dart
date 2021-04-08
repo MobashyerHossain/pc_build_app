@@ -24,24 +24,24 @@ class ItemCardThumbnail extends StatelessWidget {
           width: 100,
           height: 100,
           decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Get.isDarkMode
-                    ? MyColorTheme.dark.withOpacity(.6)
-                    : MyColorTheme.light.withOpacity(.6),
-                spreadRadius: 2,
-                blurRadius: 2,
-                offset: Offset(-4, 4),
-              ),
-              BoxShadow(
-                color: !Get.isDarkMode
-                    ? MyColorTheme.dark.withOpacity(.6)
-                    : MyColorTheme.light.withOpacity(.6),
-                spreadRadius: 2,
-                blurRadius: 1,
-                offset: Offset(-1, 1),
-              ),
-            ],
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Get.isDarkMode
+            //         ? MyColorTheme.dark.withOpacity(.6)
+            //         : MyColorTheme.light.withOpacity(.6),
+            //     spreadRadius: 2,
+            //     blurRadius: 2,
+            //     offset: Offset(-4, 4),
+            //   ),
+            //   BoxShadow(
+            //     color: !Get.isDarkMode
+            //         ? MyColorTheme.dark.withOpacity(.6)
+            //         : MyColorTheme.light.withOpacity(.6),
+            //     spreadRadius: 2,
+            //     blurRadius: 1,
+            //     offset: Offset(-1, 1),
+            //   ),
+            // ],
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),

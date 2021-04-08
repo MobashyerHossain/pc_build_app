@@ -5,6 +5,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:pc_build_app/app/core/themes/color_theme.dart';
 import 'package:pc_build_app/app/global_widgets/floating_button.dart';
+import 'package:pc_build_app/app/global_widgets/gradient_container.dart';
+import 'package:pc_build_app/app/global_widgets/menu_side_bar.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/page_changer.dart';
 import 'package:pc_build_app/app/modules/product/local_widgets/product_item_card.dart';
 import 'package:pc_build_app/app/global_widgets/search_box.dart';
@@ -23,35 +25,13 @@ class ProductPage extends GetView<ProductController> {
         floatingActionButton: FloatingButton(
           fabKey: fabKey,
         ),
-        drawer: Drawer(
-          child: Container(
-            child: Center(
-              child: Text('gsdsd'),
-            ),
-          ),
-        ),
-        body: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            SimpleGestureDetector(
-              onHorizontalSwipe: controller.onVerticalSwipe,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: Get.isDarkMode
-                        ? <Color>[
-                            Colors.grey.shade900,
-                            Colors.grey.shade700,
-                          ]
-                        : <Color>[
-                            Colors.grey.shade100,
-                            Colors.grey.shade500,
-                          ],
-                    tileMode: TileMode.clamp,
-                  ),
-                ),
+        drawer: MenuSideBar(),
+        body: GradientContainer(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              SimpleGestureDetector(
+                onHorizontalSwipe: controller.onVerticalSwipe,
                 child: GetX<ProductController>(
                   init: ProductController(),
                   builder: (_) {
@@ -65,22 +45,29 @@ class ProductPage extends GetView<ProductController> {
                             right: 10,
                           ),
                           child: StaggeredGridView.countBuilder(
+                            physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics(),
+                            ),
+                            scrollDirection: Axis.horizontal,
                             padding: EdgeInsets.only(
-                              bottom: 60,
-                              top: 60,
+                              bottom: 120,
+                              top: 120,
                             ),
                             crossAxisCount: 2,
                             itemCount: products.length,
+                            staggeredTileBuilder: (int index) =>
+                                new StaggeredTile.count(
+                              index % 3 == 0 ? 2 : 1,
+                              1,
+                            ),
+                            mainAxisSpacing: 0.0,
+                            crossAxisSpacing: 0.0,
                             itemBuilder: (BuildContext context, int index) {
+                              // Card
                               return ProductItemCard(
                                 product: products[index],
                               );
                             },
-                            staggeredTileBuilder: (int index) =>
-                                new StaggeredTile.count(
-                                    index % 3 == 0 ? 2 : 1, 1),
-                            mainAxisSpacing: 30.0,
-                            crossAxisSpacing: 0.0,
                           ),
                         ),
                         //Loading Indicator
@@ -110,16 +97,16 @@ class ProductPage extends GetView<ProductController> {
                   },
                 ),
               ),
-            ),
-            PageChanger(),
-            TopBar(),
-            Obx(
-              () {
-                final c = Get.find<ProductSearchController>();
-                return c.getSearchOn() ? SearchBox() : Container();
-              },
-            ),
-          ],
+              PageChanger(),
+              TopBar(),
+              Obx(
+                () {
+                  final c = Get.find<ProductSearchController>();
+                  return c.getSearchOn() ? SearchBox() : Container();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
